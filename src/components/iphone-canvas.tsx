@@ -10,8 +10,8 @@ import { useRef } from "react";
 
 // Tipagem básica para os nós exportados pelo gltfjsx
 type GLTFResult = {
-  nodes: any;
-  materials: any;
+  nodes: Record<string, THREE.Mesh>;
+  materials: Record<string, THREE.Material>;
 };
 
 function IphoneModel({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
@@ -20,9 +20,11 @@ function IphoneModel({ scrollProgress }: { scrollProgress: MotionValue<number> }
 
   // Corrige a orientação da textura que geralmente vem invertida no formato GLTF
   useEffect(() => {
+    /* eslint-disable react-hooks/immutability */
     screenTex.flipY = false;
     screenTex.colorSpace = THREE.SRGBColorSpace;
     screenTex.needsUpdate = true;
+    /* eslint-enable react-hooks/immutability */
   }, [screenTex]);
 
   // Baseado no seu print, o ângulo inicial estava perfeito! 

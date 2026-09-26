@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, PieChart, Utensils, Home, Car, ShoppingBag, MoreHorizontal, ChevronDown } from "lucide-react";
+import { ArrowLeft, Utensils, Home, Car, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatCurrency } from "@/lib/currency";
 import { CategoryChart } from "@/components/category-chart";

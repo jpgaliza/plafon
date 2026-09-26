@@ -7,7 +7,6 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Spotlight } from "@/components/ui/spotlight";
 import { FadeIn } from "@/components/ui/fade-in";
 import { IPhoneCanvas } from "@/components/iphone-canvas";
-import { cn } from "@/lib/utils";
 
 export default function Home() {
   const scrollTrackRef = useRef<HTMLDivElement>(null);
