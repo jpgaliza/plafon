@@ -1,0 +1,85 @@
+{
+  "Common": {
+    "appName": "Plafon",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "currency": "Currency"
+  },
+  "BottomNav": {
+    "dashboard": "Home",
+    "transactions": "History",
+    "add": "Add",
+    "subscriptions": "Subscriptions",
+    "settings": "Settings"
+  },
+  "Settings": {
+    "title": "Settings",
+    "profile": "Profile",
+    "language": "Language",
+    "languageDescription": "Choose the app language",
+    "currency": "Base currency",
+    "currencyDescription": "Default currency for displaying values",
+    "theme": "Theme",
+    "themeDescription": "App appearance",
+    "themeDark": "Dark",
+    "themeLight": "Light",
+    "themeSystem": "System",
+    "logout": "Log out",
+    "logoutDescription": "End current session",
+    "version": "Version",
+    "languages": {
+      "pt-BR": "Português (Brasil)",
+      "en-US": "English (US)"
+    },
+    "currencies": {
+      "BRL": "Brazilian Real (R$)",
+      "USD": "US Dollar ($)",
+      "EUR": "Euro (€)"
+    }
+  },
+  "Dashboard": {
+    "title": "Dashboard",
+    "grossExpenses": "Gross Expenses",
+    "balance": "Balance",
+    "income": "Income",
+    "expenses": "Expenses",
+    "monthSummary": "Monthly Summary",
+    "categories": "Categories",
+    "recentTransactions": "Recent Transactions",
+    "viewAll": "View all"
+  },
+  "Transactions": {
+    "title": "Transactions",
+    "noTransactions": "No transactions found",
+    "filter": "Filter",
+    "all": "All",
+    "income": "Income",
+    "expense": "Expenses",
+    "search": "Search transactions..."
+  },
+  "Subscriptions": {
+    "title": "Subscriptions",
+    "active": "Active",
+    "inactive": "Inactive",
+    "confirmPayment": "Confirm payment",
+    "pending": "Pending",
+    "noSubscriptions": "No subscriptions registered"
+  },
+  "NewTransaction": {
+    "title": "New Transaction",
+    "amount": "Amount",
+    "description": "Description",
+    "category": "Category",
+    "date": "Date",
+    "type": "Type",
+    "income": "Income",
+    "expense": "Expense",
+    "paymentMethod": "Payment method",
+    "addTransaction": "Add transaction"
+  }
+}

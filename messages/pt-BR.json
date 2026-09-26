@@ -1,0 +1,85 @@
+{
+  "Common": {
+    "appName": "Plafon",
+    "loading": "Carregando...",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "back": "Voltar",
+    "currency": "Moeda"
+  },
+  "BottomNav": {
+    "dashboard": "Início",
+    "transactions": "Extrato",
+    "add": "Adicionar",
+    "subscriptions": "Assinaturas",
+    "settings": "Ajustes"
+  },
+  "Settings": {
+    "title": "Ajustes",
+    "profile": "Perfil",
+    "language": "Idioma",
+    "languageDescription": "Escolha o idioma do aplicativo",
+    "currency": "Moeda base",
+    "currencyDescription": "Moeda padrão para exibição de valores",
+    "theme": "Tema",
+    "themeDescription": "Aparência do aplicativo",
+    "themeDark": "Escuro",
+    "themeLight": "Claro",
+    "themeSystem": "Sistema",
+    "logout": "Sair da conta",
+    "logoutDescription": "Encerrar sessão atual",
+    "version": "Versão",
+    "languages": {
+      "pt-BR": "Português (Brasil)",
+      "en-US": "English (US)"
+    },
+    "currencies": {
+      "BRL": "Real Brasileiro (R$)",
+      "USD": "Dólar Americano ($)",
+      "EUR": "Euro (€)"
+    }
+  },
+  "Dashboard": {
+    "title": "Dashboard",
+    "grossExpenses": "Gasto Bruto",
+    "balance": "Saldo",
+    "income": "Receitas",
+    "expenses": "Despesas",
+    "monthSummary": "Resumo Mensal",
+    "categories": "Categorias",
+    "recentTransactions": "Transações Recentes",
+    "viewAll": "Ver tudo"
+  },
+  "Transactions": {
+    "title": "Transações",
+    "noTransactions": "Nenhuma transação encontrada",
+    "filter": "Filtrar",
+    "all": "Todas",
+    "income": "Receitas",
+    "expense": "Despesas",
+    "search": "Buscar transações..."
+  },
+  "Subscriptions": {
+    "title": "Assinaturas",
+    "active": "Ativas",
+    "inactive": "Inativas",
+    "confirmPayment": "Confirmar pagamento",
+    "pending": "Pendente",
+    "noSubscriptions": "Nenhuma assinatura cadastrada"
+  },
+  "NewTransaction": {
+    "title": "Nova Transação",
+    "amount": "Valor",
+    "description": "Descrição",
+    "category": "Categoria",
+    "date": "Data",
+    "type": "Tipo",
+    "income": "Receita",
+    "expense": "Despesa",
+    "paymentMethod": "Método de pagamento",
+    "addTransaction": "Adicionar transação"
+  }
+}
