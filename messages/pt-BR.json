@@ -64,11 +64,45 @@
   },
   "Subscriptions": {
     "title": "Assinaturas",
+    "subtitle": "Radar de custos fixos e serviços recorrentes",
+    "all": "Todas",
     "active": "Ativas",
     "inactive": "Inativas",
+    "newSubscription": "Nova Assinatura",
+    "addSubscription": "Adicionar assinatura",
     "confirmPayment": "Confirmar pagamento",
     "pending": "Pendente",
-    "noSubscriptions": "Nenhuma assinatura cadastrada"
+    "noSubscriptions": "Nenhuma assinatura cadastrada",
+    "noSubscriptionsDesc": "Adicione suas assinaturas recorrentes para ter previsão de custos e não perder vencimentos.",
+    "addFirstSubscription": "Adicionar Primeira Assinatura",
+    "monthlyTotal": "Total Mensal Recorrente",
+    "activeSubsCount": "{count} assinaturas ativas",
+    "status": "Status",
+    "pausedSubsCount": "{count} pausada(s)",
+    "nextDue": "Próximo Vencimento",
+    "noneActive": "Nenhuma ativa",
+    "dueInDays": "Em {days} dia(s)",
+    "dueToday": "Vence hoje!",
+    "everyDay": "Todo dia {day}",
+    "resultsCount": "{count} resultados",
+    "paused": "Pausada",
+    "perMonth": "/mês",
+    "pauseSubscription": "Pausar assinatura",
+    "reactivateSubscription": "Reativar assinatura",
+    "deleteSubscription": "Excluir assinatura"
+  },
+  "NewSubscription": {
+    "title": "Nova Assinatura",
+    "subtitle": "Cadastre um custo fixo ou serviço recorrente",
+    "quickSuggestions": "Sugestões rápidas",
+    "name": "Nome do serviço / assinatura",
+    "namePlaceholder": "Ex: Netflix, Spotify, Academia...",
+    "amount": "Valor mensal",
+    "dueDay": "Dia do vencimento",
+    "dueDayLabel": "Todo dia {day}",
+    "category": "Categoria",
+    "paymentMethod": "Forma de cobrança",
+    "submit": "Cadastrar Assinatura"
   },
   "NewTransaction": {
     "title": "Nova Transação",
@@ -81,5 +115,29 @@
     "expense": "Despesa",
     "paymentMethod": "Método de pagamento",
     "addTransaction": "Adicionar transação"
+  },
+  "CategoriesPage": {
+    "title": "Análise de Categorias",
+    "monthlySummary": "Resumo Mensal",
+    "total": "Total",
+    "breakdown": "Detalhamento",
+    "selectMonth": "Selecione o mês",
+    "noData": "Nenhum dado para exibir."
+  },
+  "Landing": {
+    "login": "Entrar",
+    "getStarted": "Começar",
+    "heroBadge": "O futuro das suas finanças",
+    "heroTitle1": "O teto para suas",
+    "heroTitle2": "finanças inteligentes.",
+    "heroSubtitle": "Controle seus gastos, planeje suas assinaturas e atinja suas metas financeiras com o app de gestão mais intuitivo que você já usou.",
+    "cta": "Criar conta grátis",
+    "featuresTitle": "Tudo que você precisa, num só lugar.",
+    "feature1Title": "Lançamento a Jato",
+    "feature1Desc": "Adicione despesas na velocidade do pensamento. Uma interface rigorosamente mobile-first, projetada para a ponta do seu polegar. Dois toques e está registrado.",
+    "feature2Title": "Plano de Voo Mensal",
+    "feature2Desc": "Dashboard inteligente que foca no que realmente importa: quanto dinheiro ainda sobra no seu teto financeiro.",
+    "feature3Title": "Radar de Assinaturas",
+    "feature3Desc": "Netflix, Spotify, Academia... Chega de surpresas no cartão. Saiba exatamente quando e quanto cada serviço vai te cobrar e decida se vale a pena manter antes da fatura fechar."
   }
 }

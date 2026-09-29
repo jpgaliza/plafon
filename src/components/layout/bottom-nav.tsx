@@ -32,7 +32,7 @@ export function BottomNav() {
       <TransactionDrawer open={drawerOpen} onOpenChange={setDrawerOpen} />
 
       <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-lg items-center justify-around px-2">
+        <div className="mx-auto grid h-16 max-w-lg grid-cols-5 items-center px-1">
           {navItems.map((item) => {
             const isActive =
               !item.isCenter && pathname.startsWith(item.href);
@@ -40,15 +40,19 @@ export function BottomNav() {
 
             if (item.isCenter) {
               return (
-                <button
+                <div
                   key={item.labelKey}
-                  id="btn-new-transaction"
-                  onClick={() => setDrawerOpen(true)}
-                  className="flex h-12 w-12 items-center justify-center rounded-full bg-accent-blue text-white shadow-lg shadow-accent-blue/25 transition-transform hover:scale-105 active:scale-95"
-                  aria-label={t(item.labelKey)}
+                  className="flex items-center justify-center w-full"
                 >
-                  <Icon className="h-6 w-6" />
-                </button>
+                  <button
+                    id="btn-new-transaction"
+                    onClick={() => setDrawerOpen(true)}
+                    className="flex h-12 w-12 items-center justify-center rounded-full bg-accent-blue text-white shadow-lg shadow-accent-blue/25 transition-transform hover:scale-105 active:scale-95 cursor-pointer"
+                    aria-label={t(item.labelKey)}
+                  >
+                    <Icon className="h-6 w-6" />
+                  </button>
+                </div>
               );
             }
 
@@ -57,14 +61,16 @@ export function BottomNav() {
                 key={item.labelKey}
                 href={item.href}
                 className={cn(
-                  "flex flex-col items-center gap-0.5 px-3 py-1 text-xs transition-colors",
+                  "flex w-full flex-col items-center justify-center gap-1 py-1 text-[10px] sm:text-[11px] transition-colors",
                   isActive
-                    ? "text-accent-blue"
+                    ? "text-accent-blue font-medium"
                     : "text-muted-foreground hover:text-foreground"
                 )}
               >
-                <Icon className="h-5 w-5" />
-                <span>{t(item.labelKey)}</span>
+                <Icon className="h-5 w-5 shrink-0" />
+                <span className="truncate max-w-[62px] text-center leading-tight">
+                  {t(item.labelKey)}
+                </span>
               </Link>
             );
           })}

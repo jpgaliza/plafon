@@ -24,6 +24,7 @@ const navItems = [
 export function Sidebar() {
   const pathname = usePathname();
   const t = useTranslations("BottomNav");
+  const tNewTx = useTranslations("NewTransaction");
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
@@ -45,10 +46,10 @@ export function Sidebar() {
           
           <button
             onClick={() => setDrawerOpen(true)}
-            className="w-full flex items-center justify-center gap-2 rounded-lg bg-accent-blue px-4 py-3 text-sm font-semibold text-white transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-accent-blue/25 mb-8"
+            className="w-full flex items-center justify-center gap-2 rounded-lg bg-accent-blue px-4 py-3 text-sm font-semibold text-white transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-accent-blue/25 mb-8 cursor-pointer"
           >
             <Plus className="h-5 w-5" />
-            Nova Transação
+            {tNewTx("title")}
           </button>
 
           <nav className="flex flex-col gap-2">

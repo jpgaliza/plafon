@@ -35,3 +35,32 @@ export async function createTransactionAction(
 
   return { success: true };
 }
+
+export interface NewSubscriptionInput {
+  name: string;
+  amount: number;
+  due_day: number;
+  payment_method: PaymentMethod;
+  category_name?: string;
+  category_icon?: string;
+  category_color?: string;
+}
+
+export async function createSubscriptionAction(
+  input: NewSubscriptionInput
+): Promise<ActionResult> {
+  if (!input.name.trim()) {
+    return { success: false, error: "O nome da assinatura é obrigatório." };
+  }
+
+  if (!input.amount || input.amount <= 0) {
+    return { success: false, error: "O valor mensal deve ser maior que zero." };
+  }
+
+  if (!input.due_day || input.due_day < 1 || input.due_day > 31) {
+    return { success: false, error: "O dia de vencimento deve estar entre 1 e 31." };
+  }
+
+  console.log("[createSubscriptionAction]", input);
+  return { success: true };
+}

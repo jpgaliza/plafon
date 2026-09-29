@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Drawer } from "vaul";
 import {
   UtensilsCrossed,
@@ -53,6 +53,8 @@ export function TransactionDrawer({
   onOpenChange,
 }: TransactionDrawerProps) {
   const t = useTranslations("NewTransaction");
+  const locale = useLocale();
+  const isEn = locale.startsWith("en");
   const [isPending, startTransition] = useTransition();
 
   // Form state
@@ -84,7 +86,7 @@ export function TransactionDrawer({
         description,
         type,
         category_icon: cat?.icon ?? "MoreHorizontal",
-        category_name: cat?.name ?? "Outros",
+        category_name: cat ? (isEn ? cat.nameEn : cat.name) : (isEn ? "Other" : "Outros"),
         payment_method: paymentMethod,
         date,
       });
@@ -115,14 +117,14 @@ export function TransactionDrawer({
               {t("title")}
             </Drawer.Title>
             <Drawer.Close asChild>
-              <button className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+              <button className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground cursor-pointer">
                 <X className="h-5 w-5" />
               </button>
             </Drawer.Close>
           </div>
 
           {/* Scrollable content */}
-          <div className="flex-1 overflow-y-auto px-4 pb-8">
+          <div className="flex-1 overflow-y-auto px-4 pb-8 no-scrollbar">
             {/* Type toggle */}
             <div className="flex gap-1 rounded-xl bg-muted p-1">
               <button
@@ -132,7 +134,7 @@ export function TransactionDrawer({
                   setSelectedCategory(null);
                 }}
                 className={cn(
-                  "flex-1 rounded-lg py-2.5 text-sm font-medium transition-all",
+                  "flex-1 rounded-lg py-2.5 text-sm font-medium transition-all cursor-pointer",
                   type === "expense"
                     ? "bg-accent-red text-white shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
@@ -150,7 +152,7 @@ export function TransactionDrawer({
                   setSelectedCategory(null);
                 }}
                 className={cn(
-                  "flex-1 rounded-lg py-2.5 text-sm font-medium transition-all",
+                  "flex-1 rounded-lg py-2.5 text-sm font-medium transition-all cursor-pointer",
                   type === "income"
                     ? "bg-accent-green text-white shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
@@ -180,7 +182,7 @@ export function TransactionDrawer({
                 <input
                   type="text"
                   inputMode="decimal"
-                  placeholder="0,00"
+                  placeholder={isEn ? "0.00" : "0,00"}
                   value={amount}
                   onChange={(e) => {
                     // Allow only numbers, comma and dot
@@ -200,7 +202,7 @@ export function TransactionDrawer({
               </label>
               <input
                 type="text"
-                placeholder={t("description")}
+                placeholder={isEn ? "e.g. Supermarket, Salary..." : "Ex: Mercado, Salário..."}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="mt-1.5 w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/40 focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
@@ -254,7 +256,7 @@ export function TransactionDrawer({
                       type="button"
                       onClick={() => setSelectedCategory(idx)}
                       className={cn(
-                        "flex flex-col items-center gap-1.5 rounded-xl px-1 py-3 text-xs transition-all",
+                        "flex flex-col items-center gap-1.5 rounded-xl px-1 py-3 text-xs transition-all cursor-pointer",
                         selectedCategory === idx
                           ? "bg-muted ring-2 ring-accent-blue"
                           : "hover:bg-muted/60"
@@ -270,7 +272,7 @@ export function TransactionDrawer({
                         />
                       </div>
                       <span className="truncate text-[11px] leading-tight text-muted-foreground">
-                        {cat.name}
+                        {isEn ? cat.nameEn : cat.name}
                       </span>
                     </button>
                   );
@@ -290,13 +292,13 @@ export function TransactionDrawer({
                     type="button"
                     onClick={() => setPaymentMethod(pm.value)}
                     className={cn(
-                      "rounded-lg px-3 py-2 text-xs font-medium transition-all",
+                      "rounded-lg px-3 py-2 text-xs font-medium transition-all cursor-pointer",
                       paymentMethod === pm.value
                         ? "bg-accent-blue text-white"
                         : "bg-muted text-muted-foreground hover:text-foreground"
                     )}
                   >
-                    {pm.label}
+                    {isEn ? pm.labelEn : pm.label}
                   </button>
                 ))}
               </div>
@@ -308,7 +310,7 @@ export function TransactionDrawer({
               disabled={!isFormValid || isPending}
               onClick={handleSubmit}
               className={cn(
-                "mt-6 flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-semibold transition-all disabled:opacity-40",
+                "mt-6 flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-semibold transition-all cursor-pointer disabled:cursor-not-allowed disabled:opacity-40",
                 type === "expense"
                   ? "bg-accent-red text-white shadow-lg shadow-accent-red/20"
                   : "bg-accent-green text-white shadow-lg shadow-accent-green/20"

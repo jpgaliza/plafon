@@ -52,7 +52,7 @@ export function SettingsClient({
             <button
               key={locale}
               onClick={() => setLocaleAction(locale as Locale)}
-              className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-muted"
+              className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-muted cursor-pointer"
             >
               <span>
                 {t(`languages.${locale}` as Parameters<typeof t>[0])}
@@ -83,7 +83,7 @@ export function SettingsClient({
             <button
               key={currency}
               onClick={() => setCurrencyAction(currency as Currency)}
-              className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-muted"
+              className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-muted cursor-pointer"
             >
               <span>
                 {t(`currencies.${currency}` as Parameters<typeof t>[0])}
@@ -114,7 +114,7 @@ export function SettingsClient({
             <button
               key={theme}
               onClick={() => setThemeAction(theme)}
-              className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-muted"
+              className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-muted cursor-pointer"
             >
               <span>
                 {t(`theme${theme.charAt(0).toUpperCase() + theme.slice(1)}` as Parameters<typeof t>[0])}
@@ -129,7 +129,7 @@ export function SettingsClient({
 
       {/* Logout */}
       <section className="rounded-xl border border-border bg-card">
-        <button className="flex w-full items-center gap-3 px-4 py-3.5 text-sm transition-colors hover:bg-muted rounded-xl">
+        <button className="flex w-full items-center gap-3 px-4 py-3.5 text-sm transition-colors hover:bg-muted rounded-xl cursor-pointer">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent-red/10">
             <LogOut className="h-5 w-5 text-accent-red" />
           </div>

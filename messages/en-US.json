@@ -64,11 +64,45 @@
   },
   "Subscriptions": {
     "title": "Subscriptions",
+    "subtitle": "Radar for fixed costs and recurring services",
+    "all": "All",
     "active": "Active",
     "inactive": "Inactive",
+    "newSubscription": "New Subscription",
+    "addSubscription": "Add subscription",
     "confirmPayment": "Confirm payment",
     "pending": "Pending",
-    "noSubscriptions": "No subscriptions registered"
+    "noSubscriptions": "No subscriptions registered",
+    "noSubscriptionsDesc": "Add your recurring subscriptions to anticipate costs and never miss a due date.",
+    "addFirstSubscription": "Add First Subscription",
+    "monthlyTotal": "Total Monthly Recurring",
+    "activeSubsCount": "{count} active subscriptions",
+    "status": "Status",
+    "pausedSubsCount": "{count} paused",
+    "nextDue": "Next Due Date",
+    "noneActive": "None active",
+    "dueInDays": "In {days} day(s)",
+    "dueToday": "Due today!",
+    "everyDay": "Every day {day}",
+    "resultsCount": "{count} results",
+    "paused": "Paused",
+    "perMonth": "/mo",
+    "pauseSubscription": "Pause subscription",
+    "reactivateSubscription": "Reactivate subscription",
+    "deleteSubscription": "Delete subscription"
+  },
+  "NewSubscription": {
+    "title": "New Subscription",
+    "subtitle": "Register a fixed cost or recurring service",
+    "quickSuggestions": "Quick suggestions",
+    "name": "Service / subscription name",
+    "namePlaceholder": "e.g. Netflix, Spotify, Gym...",
+    "amount": "Monthly amount",
+    "dueDay": "Due day",
+    "dueDayLabel": "Every day {day}",
+    "category": "Category",
+    "paymentMethod": "Payment method",
+    "submit": "Register Subscription"
   },
   "NewTransaction": {
     "title": "New Transaction",
@@ -81,5 +115,29 @@
     "expense": "Expense",
     "paymentMethod": "Payment method",
     "addTransaction": "Add transaction"
+  },
+  "CategoriesPage": {
+    "title": "Category Analysis",
+    "monthlySummary": "Monthly Summary",
+    "total": "Total",
+    "breakdown": "Breakdown",
+    "selectMonth": "Select month",
+    "noData": "No data to display."
+  },
+  "Landing": {
+    "login": "Log in",
+    "getStarted": "Get Started",
+    "heroBadge": "The future of your finances",
+    "heroTitle1": "The ceiling for your",
+    "heroTitle2": "smart finances.",
+    "heroSubtitle": "Control your expenses, anticipate subscriptions, and achieve your financial goals with the most intuitive management app you've ever used.",
+    "cta": "Create free account",
+    "featuresTitle": "Everything you need, in one place.",
+    "feature1Title": "Lightning Fast Logging",
+    "feature1Desc": "Add expenses at the speed of thought. A strictly mobile-first interface designed for your thumb. Two taps and it's recorded.",
+    "feature2Title": "Monthly Flight Plan",
+    "feature2Desc": "Smart dashboard that focuses on what truly matters: how much money remains under your spending ceiling.",
+    "feature3Title": "Subscription Radar",
+    "feature3Desc": "Netflix, Spotify, Gym... No more surprise charges on your card. Know exactly when and how much each service bills you and stay in full control."
   }
 }

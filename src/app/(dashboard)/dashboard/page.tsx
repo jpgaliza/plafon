@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import Link from "next/link";
 import { ArrowUpRight, ArrowDownRight, Wallet, ShoppingBag, Car, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -10,6 +10,8 @@ import { FadeIn } from "@/components/ui/fade-in";
 
 export default function DashboardPage() {
   const t = useTranslations("Dashboard");
+  const locale = useLocale();
+  const isEn = locale.startsWith("en");
 
   // Dummy data
   const balance = 12540.50;
@@ -17,17 +19,50 @@ export default function DashboardPage() {
   const expenses = 2459.50;
 
   const chartData = [
-    { name: "Moradia", value: 1200, color: "#8B5CF6" },
-    { name: "Alimentação", value: 850, color: "#F97316" },
-    { name: "Transporte", value: 409.50, color: "#3B82F6" },
+    { name: isEn ? "Housing" : "Moradia", value: 1200, color: "#8B5CF6" },
+    { name: isEn ? "Food" : "Alimentação", value: 850, color: "#F97316" },
+    { name: isEn ? "Transport" : "Transporte", value: 409.50, color: "#3B82F6" },
   ];
 
   const recentTransactions = [
-    { id: 1, name: "Mercado", category: "Alimentação", amount: -120.50, date: "Hoje", icon: ShoppingBag, color: "text-accent-red" },
-    { id: 2, name: "Uber", category: "Transporte", amount: -35.00, date: "Ontem", icon: Car, color: "text-accent-red" },
-    { id: 3, name: "Salário", category: "Renda", amount: 15000.00, date: "05/Set", icon: Wallet, color: "text-accent-green" },
-    { id: 4, name: "Aluguel", category: "Moradia", amount: -1200.00, date: "01/Set", icon: Home, color: "text-accent-red" },
+    {
+      id: 1,
+      name: isEn ? "Supermarket" : "Mercado",
+      category: isEn ? "Food" : "Alimentação",
+      amount: -120.50,
+      date: isEn ? "Today" : "Hoje",
+      icon: ShoppingBag,
+      color: "text-accent-red",
+    },
+    {
+      id: 2,
+      name: "Uber",
+      category: isEn ? "Transport" : "Transporte",
+      amount: -35.00,
+      date: isEn ? "Yesterday" : "Ontem",
+      icon: Car,
+      color: "text-accent-red",
+    },
+    {
+      id: 3,
+      name: isEn ? "Salary" : "Salário",
+      category: isEn ? "Income" : "Renda",
+      amount: 15000.00,
+      date: isEn ? "Sep 5" : "05/Set",
+      icon: Wallet,
+      color: "text-accent-green",
+    },
+    {
+      id: 4,
+      name: isEn ? "Rent" : "Aluguel",
+      category: isEn ? "Housing" : "Moradia",
+      amount: -1200.00,
+      date: isEn ? "Sep 1" : "01/Set",
+      icon: Home,
+      color: "text-accent-red",
+    },
   ];
+
 
   return (
     <div className="mx-auto w-full max-w-lg md:max-w-6xl px-4 md:px-8 py-6 md:py-8">
@@ -46,7 +81,7 @@ export default function DashboardPage() {
             <span className="text-sm font-medium">{t("balance")}</span>
           </div>
           <p className="mt-2 text-3xl font-bold tabular-nums text-foreground">
-            {formatCurrency(balance)}
+            {formatCurrency(balance, undefined, locale)}
           </p>
         </FadeIn>
 
@@ -57,7 +92,7 @@ export default function DashboardPage() {
               <div>
                 <p className="text-xs md:text-sm text-muted-foreground">{t("income")}</p>
                 <p className="mt-1 text-lg md:text-2xl font-bold tabular-nums text-accent-green">
-                  {formatCurrency(income)}
+                  {formatCurrency(income, undefined, locale)}
                 </p>
               </div>
               <div className="rounded-full bg-accent-green/10 p-1.5 md:p-2">
@@ -71,7 +106,7 @@ export default function DashboardPage() {
               <div>
                 <p className="text-xs md:text-sm text-muted-foreground">{t("expenses")}</p>
                 <p className="mt-1 text-lg md:text-2xl font-bold tabular-nums text-accent-red">
-                  {formatCurrency(expenses)}
+                  {formatCurrency(expenses, undefined, locale)}
                 </p>
               </div>
               <div className="rounded-full bg-accent-red/10 p-1.5 md:p-2">
@@ -91,9 +126,9 @@ export default function DashboardPage() {
               <h2 className="text-base md:text-lg font-semibold">{t("recentTransactions")}</h2>
             </FadeIn>
             <FadeIn delay={0.6}>
-              <button className="text-xs md:text-sm font-medium text-accent-blue hover:underline">
+              <Link href="/transactions" className="text-xs md:text-sm font-medium text-accent-blue hover:underline cursor-pointer">
                 {t("viewAll")}
-              </button>
+              </Link>
             </FadeIn>
           </div>
 
@@ -110,7 +145,7 @@ export default function DashboardPage() {
                   </div>
                 </div>
                 <p className={cn("text-sm md:text-base font-semibold tabular-nums", tx.color)}>
-                  {tx.amount > 0 ? "+" : "−"} {formatCurrency(Math.abs(tx.amount))}
+                  {tx.amount > 0 ? "+" : "−"} {formatCurrency(Math.abs(tx.amount), undefined, locale)}
                 </p>
               </FadeIn>
             ))}
@@ -123,14 +158,15 @@ export default function DashboardPage() {
           <FadeIn delay={0.5} className="rounded-2xl border border-border bg-card p-5 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-sm md:text-base font-semibold">{t("categories")}</h2>
-              <Link href="/categories" className="text-xs md:text-sm font-medium text-accent-blue hover:underline">
-                {t("viewAll") || "Ver mais"}
+              <Link href="/categories" className="text-xs md:text-sm font-medium text-accent-blue hover:underline cursor-pointer">
+                {t("viewAll")}
               </Link>
             </div>
             
             <div className="flex-1 flex flex-col items-center justify-center w-full min-h-[220px]">
               <CategoryChart 
                 data={chartData} 
+                locale={locale}
                 className="w-full h-full"
                 innerRadius={70}
                 outerRadius={95}

@@ -2,6 +2,7 @@
 
 import React, { useRef } from "react";
 import Link from "next/link";
+import { useTranslations, useLocale } from "next-intl";
 import { ArrowRight, PieChart, Zap, Target } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Spotlight } from "@/components/ui/spotlight";
@@ -9,6 +10,9 @@ import { FadeIn } from "@/components/ui/fade-in";
 import { IPhoneCanvas } from "@/components/iphone-canvas";
 
 export default function Home() {
+  const t = useTranslations("Landing");
+  const locale = useLocale();
+  const isEn = locale.startsWith("en");
   const scrollTrackRef = useRef<HTMLDivElement>(null);
 
   // Tracks the scroll progress of the sticky section
@@ -43,13 +47,13 @@ export default function Home() {
               href="/login"
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
-              Entrar
+              {t("login")}
             </Link>
             <Link
               href="/register"
               className="rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background transition-transform hover:scale-105"
             >
-              Começar
+              {t("getStarted")}
             </Link>
           </div>
         </nav>
@@ -70,23 +74,23 @@ export default function Home() {
               <FadeIn delay={0.1}>
                 <div className="inline-flex items-center rounded-full border border-accent-blue/30 bg-accent-blue/10 px-3 py-1 text-sm font-medium text-accent-blue backdrop-blur-md">
                   <span className="flex h-2 w-2 rounded-full bg-accent-blue mr-2 animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
-                  O futuro das suas finanças
+                  {t("heroBadge")}
                   <span className="flex h-2 w-2 rounded-full bg-accent-blue ml-2 animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
                 </div>
               </FadeIn>
 
               <FadeIn delay={0.2} className="mt-8">
                 <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-foreground via-foreground to-muted-foreground max-w-4xl mx-auto leading-[1.1]">
-                  O teto para suas <br className="hidden sm:block" />
+                  {t("heroTitle1")} <br className="hidden sm:block" />
                   <span className="bg-clip-text text-transparent bg-gradient-to-r from-accent-blue to-accent-green">
-                    finanças inteligentes.
+                    {t("heroTitle2")}
                   </span>
                 </h1>
               </FadeIn>
 
               <FadeIn delay={0.3} className="mt-6">
                 <p className="max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed">
-                  Controle seus gastos, planeje suas assinaturas e atinja suas metas financeiras com o app de gestão mais intuitivo que você já usou.
+                  {t("heroSubtitle")}
                 </p>
               </FadeIn>
 
@@ -95,7 +99,7 @@ export default function Home() {
                   href="/register"
                   className="inline-flex items-center gap-2 rounded-full bg-accent-blue px-8 py-4 text-base font-semibold text-white transition-all hover:scale-105 hover:shadow-[0_0_24px_rgba(59,130,246,0.4)]"
                 >
-                  Criar conta grátis
+                  {t("cta")}
                   <ArrowRight className="h-5 w-5" />
                 </Link>
               </FadeIn>
@@ -120,7 +124,7 @@ export default function Home() {
             <div className="relative">
               <FadeIn delay={0.1}>
                 <h2 className="text-center text-3xl md:text-4xl font-bold text-foreground mb-12">
-                  Tudo que você precisa, num só lugar.
+                  {t("featuresTitle")}
                 </h2>
               </FadeIn>
 
@@ -137,9 +141,9 @@ export default function Home() {
                   <div className="h-14 w-14 rounded-2xl bg-accent-blue/10 flex items-center justify-center border border-accent-blue/20 mb-6 shadow-[inset_0_1px_0_rgba(59,130,246,0.4)]">
                     <Zap className="h-7 w-7 text-accent-blue" />
                   </div>
-                  <h3 className="text-2xl font-bold text-foreground">Lançamento a Jato</h3>
+                  <h3 className="text-2xl font-bold text-foreground">{t("feature1Title")}</h3>
                   <p className="mt-3 text-muted-foreground leading-relaxed text-lg">
-                    Adicione despesas na velocidade do pensamento. Uma interface rigorosamente mobile-first, projetada para a ponta do seu polegar. Dois toques e está registrado.
+                    {t("feature1Desc")}
                   </p>
                 </FadeIn>
 
@@ -154,9 +158,9 @@ export default function Home() {
                   <div className="h-14 w-14 rounded-2xl bg-accent-green/10 flex items-center justify-center border border-accent-green/20 mb-6 shadow-[inset_0_1px_0_rgba(16,185,129,0.4)]">
                     <PieChart className="h-7 w-7 text-accent-green" />
                   </div>
-                  <h3 className="text-2xl font-bold text-foreground">Plano de Voo Mensal</h3>
+                  <h3 className="text-2xl font-bold text-foreground">{t("feature2Title")}</h3>
                   <p className="mt-3 text-muted-foreground leading-relaxed">
-                    Dashboard inteligente que foca no que realmente importa: quanto dinheiro ainda sobra no seu teto financeiro.
+                    {t("feature2Desc")}
                   </p>
                 </FadeIn>
 
@@ -173,14 +177,17 @@ export default function Home() {
                       <div className="h-14 w-14 rounded-2xl bg-accent-red/10 flex items-center justify-center border border-accent-red/20 mb-6 shadow-[inset_0_1px_0_rgba(244,63,94,0.4)]">
                         <Target className="h-7 w-7 text-accent-red" />
                       </div>
-                      <h3 className="text-2xl font-bold text-foreground">Radar de Assinaturas</h3>
+                      <h3 className="text-2xl font-bold text-foreground">{t("feature3Title")}</h3>
                       <p className="mt-3 text-muted-foreground leading-relaxed text-lg">
-                        Netflix, Spotify, Academia... Chega de surpresas no cartão. Saiba exatamente quando e quanto cada serviço vai te cobrar e decida se vale a pena manter antes da fatura fechar.
+                        {t("feature3Desc")}
                       </p>
                     </div>
                     {/* Decorative side element */}
                     <div className="hidden md:flex flex-col gap-3 shrink-0">
-                      {["Netflix · R$ 55,90", "Spotify · R$ 21,90", "iCloud · R$ 12,90", "Academia · R$ 99,00"].map((s, i) => (
+                      {(isEn
+                        ? ["Netflix · $15.99", "Spotify · $10.99", "iCloud · $2.99", "Gym · $30.00"]
+                        : ["Netflix · R$ 55,90", "Spotify · R$ 21,90", "iCloud · R$ 12,90", "Academia · R$ 99,00"]
+                      ).map((s, i) => (
                         <motion.div
                           key={s}
                           initial={{ opacity: 0, x: 20 }}

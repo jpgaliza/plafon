@@ -143,11 +143,30 @@
   html {
     @apply font-sans;
   }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+  button:disabled,
+  [role="button"][aria-disabled="true"] {
+    cursor: not-allowed;
+  }
 }
 
 /* ─── Plafon: Tabular numbers for financial values ─── */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
+}
+
+/* ─── Scrollbar Utilities (hide scrollbar while keeping scroll functionality) ─── */
+.scrollbar-none,
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.scrollbar-none::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
 }
 
 /* ─── Liquid Glass Card — Apple visionOS-inspired ─── */

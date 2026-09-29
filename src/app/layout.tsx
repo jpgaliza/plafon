@@ -20,7 +20,11 @@ export const metadata: Metadata = {
     "Controle suas finanças de forma simples e inteligente. Acompanhe receitas, despesas e assinaturas com o Plafon.",
 };
 
-export default async function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   const locale = await getLocale();
   const messages = await getMessages();
 
