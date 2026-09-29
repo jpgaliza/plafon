@@ -15,6 +15,7 @@ import {
   setCurrencyAction,
   setThemeAction,
 } from "./actions";
+import { signOutAction } from "@/app/auth/actions";
 
 interface SettingsClientProps {
   currentLocale: string;
@@ -129,7 +130,10 @@ export function SettingsClient({
 
       {/* Logout */}
       <section className="rounded-xl border border-border bg-card">
-        <button className="flex w-full items-center gap-3 px-4 py-3.5 text-sm transition-colors hover:bg-muted rounded-xl cursor-pointer">
+        <button
+          onClick={() => signOutAction()}
+          className="flex w-full items-center gap-3 px-4 py-3.5 text-sm transition-colors hover:bg-muted rounded-xl cursor-pointer"
+        >
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent-red/10">
             <LogOut className="h-5 w-5 text-accent-red" />
           </div>

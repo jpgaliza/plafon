@@ -50,13 +50,58 @@ export async function updateSession(request: NextRequest) {
 
   const user = data?.claims;
 
+  const isStaticAsset =
+    /\.(?:svg|png|jpg|jpeg|gif|webp|glb|gltf|bin|woff2?|ico|css|js)$/i.test(
+      request.nextUrl.pathname
+    );
+  if (isStaticAsset) {
+    return supabaseResponse;
+  }
+
+  // Intercept OTP expired or access denied errors from Supabase redirects and route cleanly to login
+  const urlError = request.nextUrl.searchParams.get("error");
+  const urlErrorCode = request.nextUrl.searchParams.get("error_code");
+  if (urlError || urlErrorCode) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    url.search = "?error=expired";
+    return NextResponse.redirect(url);
+  }
+
   // Public routes that don't require authentication
-  const publicPaths = ["/", "/login", "/register", "/auth"];
+  const publicPaths = [
+    "/",
+    "/login",
+    "/register",
+    "/auth",
+    "/forgot-password",
+    "/reset-password",
+  ];
   const isPublicPath = publicPaths.some(
     (path) =>
       request.nextUrl.pathname === path ||
       request.nextUrl.pathname.startsWith(`${path}/`)
   );
+
+  // If user is already authenticated and visits login/register/forgot-password, send to dashboard
+  if (
+    user &&
+    (request.nextUrl.pathname === "/login" ||
+      request.nextUrl.pathname === "/register" ||
+      request.nextUrl.pathname === "/forgot-password")
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/dashboard";
+    return NextResponse.redirect(url);
+  }
+
+  // /reset-password requires an active recovery session (created by /auth/callback)
+  if (!user && request.nextUrl.pathname === "/reset-password") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    url.search = "?error=expired";
+    return NextResponse.redirect(url);
+  }
 
   if (!user && !isPublicPath) {
     // No user — redirect to login
