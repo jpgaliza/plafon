@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   Receipt,
   Plus,
+  FolderKanban,
   CreditCard,
   Settings,
 } from "lucide-react";
@@ -17,6 +18,7 @@ import { TransactionDrawer } from "@/components/transaction-drawer";
 const navItems = [
   { href: "/dashboard", icon: LayoutDashboard, labelKey: "dashboard" as const },
   { href: "/transactions", icon: Receipt, labelKey: "transactions" as const },
+  { href: "/groups", icon: FolderKanban, labelKey: "groups" as const },
   { href: "/subscriptions", icon: CreditCard, labelKey: "subscriptions" as const },
   { href: "/settings", icon: Settings, labelKey: "settings" as const },
 ];
@@ -43,8 +45,9 @@ export function Sidebar() {
             </div>
             <span className="font-semibold text-lg tracking-tight">Plafon</span>
           </div>
-          
+
           <button
+            type="button"
             onClick={() => setDrawerOpen(true)}
             className="w-full flex items-center justify-center gap-2 rounded-lg bg-accent-blue px-4 py-3 text-sm font-semibold text-white transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-accent-blue/25 mb-8 cursor-pointer"
           >

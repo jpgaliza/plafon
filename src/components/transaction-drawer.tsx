@@ -1,19 +1,22 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Drawer } from "vaul";
-import { Calendar, Minus, Plus, X, Loader2 } from "lucide-react";
+import { Calendar, Check, FolderPlus, Minus, Plus, X, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DEFAULT_CATEGORIES, PAYMENT_METHODS } from "@/lib/categories";
 import { CategoryIcon } from "@/lib/icons";
 import type {
+  Group,
   TransactionType,
   PaymentMethod,
   TransactionWithDetails,
 } from "@/lib/types";
 import {
+  createGroupAction,
   createTransactionAction,
+  getUserGroupsAction,
   updateTransactionAction,
 } from "@/app/(dashboard)/actions";
 
@@ -94,7 +97,59 @@ function TransactionDrawerForm({
   const [date, setDate] = useState(
     () => transaction?.date ?? new Date().toISOString().split("T")[0]
   );
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [selectedGroupIds, setSelectedGroupIds] = useState<string[]>(
+    () => transaction?.group_ids ?? []
+  );
+  const [showInlineGroup, setShowInlineGroup] = useState(false);
+  const [inlineGroupName, setInlineGroupName] = useState("");
+  const [isCreatingGroup, setIsCreatingGroup] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    getUserGroupsAction().then((loaded) => {
+      if (active) {
+        setGroups(loaded);
+      }
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  function toggleGroupSelection(groupId: string) {
+    setSelectedGroupIds((prev) =>
+      prev.includes(groupId)
+        ? prev.filter((id) => id !== groupId)
+        : [...prev, groupId]
+    );
+  }
+
+  async function handleCreateInlineGroup() {
+    const trimmed = inlineGroupName.trim();
+    if (!trimmed || isCreatingGroup) return;
+    setError(null);
+    setIsCreatingGroup(true);
+    try {
+      const res = await createGroupAction(trimmed);
+      if (res.success && res.group) {
+        const created = res.group;
+        setGroups((prev) =>
+          prev.some((g) => g.id === created.id) ? prev : [created, ...prev]
+        );
+        setSelectedGroupIds((prev) =>
+          prev.includes(created.id) ? prev : [...prev, created.id]
+        );
+        setInlineGroupName("");
+        setShowInlineGroup(false);
+      } else if (res.error) {
+        setError(res.error);
+      }
+    } finally {
+      setIsCreatingGroup(false);
+    }
+  }
 
   const filteredCategories = DEFAULT_CATEGORIES.filter(
     (cat) => cat.type === type
@@ -121,6 +176,7 @@ function TransactionDrawerForm({
           : "Outros",
         payment_method: paymentMethod,
         date,
+        group_ids: selectedGroupIds,
       };
 
       const result =
@@ -343,6 +399,84 @@ function TransactionDrawerForm({
               </button>
             ))}
           </div>
+        </div>
+
+        {/* Groups (optional multi-select + inline create) */}
+        <div className="mt-4">
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-medium text-muted-foreground">
+              {t("groups")}{" "}
+              <span className="text-muted-foreground/60">
+                ({t("groupsOptional")})
+              </span>
+            </label>
+            <button
+              type="button"
+              onClick={() => setShowInlineGroup((prev) => !prev)}
+              data-testid="tx-drawer-create-group-toggle"
+              className="inline-flex items-center gap-1 text-xs font-medium text-accent-blue hover:underline cursor-pointer"
+            >
+              <FolderPlus className="h-3.5 w-3.5" />
+              <span>{t("createGroupInline")}</span>
+            </button>
+          </div>
+
+          {showInlineGroup && (
+            <div className="mt-2 flex items-center gap-2">
+              <input
+                type="text"
+                maxLength={80}
+                placeholder={t("groupNamePlaceholder")}
+                value={inlineGroupName}
+                onChange={(e) => setInlineGroupName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    void handleCreateInlineGroup();
+                  }
+                }}
+                data-testid="tx-drawer-new-group-input"
+                className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-xs text-foreground outline-none placeholder:text-muted-foreground/50 focus:border-accent-blue"
+              />
+              <button
+                type="button"
+                disabled={!inlineGroupName.trim() || isCreatingGroup}
+                onClick={() => void handleCreateInlineGroup()}
+                data-testid="tx-drawer-new-group-submit"
+                className="inline-flex items-center gap-1 rounded-lg bg-accent-blue px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-accent-blue/90 disabled:opacity-40 cursor-pointer"
+              >
+                {isCreatingGroup && (
+                  <Loader2 className="h-3 w-3 animate-spin" />
+                )}
+                <span>{t("addGroupConfirm")}</span>
+              </button>
+            </div>
+          )}
+
+          {groups.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-2">
+              {groups.map((g) => {
+                const isSelected = selectedGroupIds.includes(g.id);
+                return (
+                  <button
+                    key={g.id}
+                    type="button"
+                    onClick={() => toggleGroupSelection(g.id)}
+                    data-testid={`tx-drawer-group-pill-${g.id}`}
+                    className={cn(
+                      "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-all cursor-pointer",
+                      isSelected
+                        ? "border-accent-blue bg-accent-blue/15 text-white ring-1 ring-accent-blue"
+                        : "border-white/10 bg-muted/60 text-muted-foreground hover:text-foreground hover:border-white/20"
+                    )}
+                  >
+                    {isSelected && <Check className="h-3 w-3 text-accent-blue" />}
+                    <span>{g.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Submit */}

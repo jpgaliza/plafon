@@ -8,8 +8,8 @@ import {
   LayoutDashboard,
   Receipt,
   Plus,
+  FolderKanban,
   CreditCard,
-  Settings,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TransactionDrawer } from "@/components/transaction-drawer";
@@ -18,8 +18,8 @@ const navItems = [
   { href: "/dashboard", icon: LayoutDashboard, labelKey: "dashboard" as const },
   { href: "/transactions", icon: Receipt, labelKey: "transactions" as const },
   { href: "#add", icon: Plus, labelKey: "add" as const, isCenter: true },
+  { href: "/groups", icon: FolderKanban, labelKey: "groups" as const },
   { href: "/subscriptions", icon: CreditCard, labelKey: "subscriptions" as const },
-  { href: "/settings", icon: Settings, labelKey: "settings" as const },
 ];
 
 export function BottomNav() {
@@ -45,6 +45,7 @@ export function BottomNav() {
                   className="flex items-center justify-center w-full"
                 >
                   <button
+                    type="button"
                     id="btn-new-transaction"
                     onClick={() => setDrawerOpen(true)}
                     className="flex h-12 w-12 items-center justify-center rounded-full bg-accent-blue text-white shadow-lg shadow-accent-blue/25 transition-transform hover:scale-105 active:scale-95 cursor-pointer"
