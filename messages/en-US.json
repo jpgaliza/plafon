@@ -14,12 +14,18 @@
     "dashboard": "Home",
     "transactions": "History",
     "add": "Add",
+    "groups": "Groups",
     "subscriptions": "Subscriptions",
     "settings": "Settings"
   },
   "Settings": {
     "title": "Settings",
     "profile": "Profile",
+    "monthlyBudget": "Monthly spending ceiling",
+    "monthlyBudgetDescription": "Planned monthly limit to track how much remains in your budget",
+    "monthlyBudgetPlaceholder": "0.00",
+    "saveBudget": "Save ceiling",
+    "budgetSaved": "Ceiling updated!",
     "language": "Language",
     "languageDescription": "Choose the app language",
     "currency": "Base currency",
@@ -51,16 +57,29 @@
     "monthSummary": "Monthly Summary",
     "categories": "Categories",
     "recentTransactions": "Recent Transactions",
-    "viewAll": "View all"
+    "viewAll": "View all",
+    "spendingCeiling": "Monthly ceiling",
+    "remaining": "remaining",
+    "exceeded": "exceeded",
+    "ofBudget": "of {budget}",
+    "setBudget": "Set spending ceiling",
+    "noTransactions": "No transactions yet",
+    "noTransactionsDesc": "Tap the + button to record your first income or expense.",
+    "noCategoryData": "No data to display."
   },
   "Transactions": {
     "title": "Transactions",
+    "subtitle": "Full log and history of all transactions",
     "noTransactions": "No transactions found",
+    "noTransactionsDesc": "Add your income and expenses to start tracking your history.",
     "filter": "Filter",
     "all": "All",
     "income": "Income",
     "expense": "Expenses",
-    "search": "Search transactions..."
+    "search": "Search transactions...",
+    "editTransaction": "Edit transaction",
+    "deleteTransaction": "Delete transaction",
+    "confirmDelete": "Delete?"
   },
   "Subscriptions": {
     "title": "Subscriptions",
@@ -106,6 +125,7 @@
   },
   "NewTransaction": {
     "title": "New Transaction",
+    "editTitle": "Edit Transaction",
     "amount": "Amount",
     "description": "Description",
     "category": "Category",
@@ -114,7 +134,13 @@
     "income": "Income",
     "expense": "Expense",
     "paymentMethod": "Payment method",
-    "addTransaction": "Add transaction"
+    "addTransaction": "Add transaction",
+    "saveChanges": "Save changes",
+    "groups": "Groups",
+    "groupsOptional": "optional",
+    "createGroupInline": "Create group",
+    "groupNamePlaceholder": "Group name...",
+    "addGroupConfirm": "Create"
   },
   "CategoriesPage": {
     "title": "Category Analysis",
@@ -122,7 +148,40 @@
     "total": "Total",
     "breakdown": "Breakdown",
     "selectMonth": "Select month",
-    "noData": "No data to display."
+    "noData": "No data to display.",
+    "noDataDesc": "No expenses recorded for this month."
+  },
+  "Groups": {
+    "title": "Groups",
+    "subtitle": "Organize transactions by trip, goal, or project",
+    "newGroup": "New group",
+    "renameGroup": "Rename group",
+    "deleteGroup": "Delete group",
+    "confirmDelete": "Delete?",
+    "deleteGroupNote": "Transactions will not be deleted",
+    "groupName": "Group name",
+    "groupNamePlaceholder": "e.g. France Trip, PlayStation 5...",
+    "createSubmit": "Create group",
+    "saveSubmit": "Save name",
+    "noGroups": "No groups yet",
+    "noGroupsDesc": "Create groups to track spending for trips, goals, or specific projects.",
+    "createFirstGroup": "Create first group",
+    "transactionCount": "{count, plural, =0 {0 transactions} one {1 transaction} other {# transactions}}",
+    "totalSpent": "Total spent",
+    "totalReceived": "Total received",
+    "balance": "Balance",
+    "categoriesBreakdown": "Expenses by category",
+    "groupTransactions": "Group transactions",
+    "addExisting": "Add transactions",
+    "removeFromGroup": "Remove from group",
+    "noTransactionsInGroup": "No transactions in this group",
+    "noTransactionsInGroupDesc": "Add existing transactions or link new transactions when creating them.",
+    "selectTransactionsTitle": "Add existing transactions",
+    "selectTransactionsSubtitle": "Select one or more transactions to include in this group",
+    "searchTransactions": "Search transactions...",
+    "noAvailableTransactions": "No available transactions to add",
+    "addSelected": "Add selected ({count})",
+    "backToGroups": "Back to groups"
   },
   "Landing": {
     "login": "Log in",
@@ -138,7 +197,8 @@
     "feature2Title": "Monthly Flight Plan",
     "feature2Desc": "Smart dashboard that focuses on what truly matters: how much money remains under your spending ceiling.",
     "feature3Title": "Subscription Radar",
-    "feature3Desc": "Netflix, Spotify, Gym... No more surprise charges on your card. Know exactly when and how much each service bills you and stay in full control."
+    "feature3Desc": "Netflix, Spotify, Gym... No more surprise charges on your card. Know exactly when and how much each service bills you and stay in full control.",
+    "budgetPreviewLabel": "Your monthly ceiling"
   },
   "Auth": {
     "loginTitle": "Welcome back",

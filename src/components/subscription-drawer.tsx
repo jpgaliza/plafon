@@ -3,37 +3,17 @@
 import { useState, useTransition } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Drawer } from "vaul";
-import {
-  UtensilsCrossed,
-  Gamepad2,
-  Wrench,
-  Heart,
-  GraduationCap,
-  ShoppingBag,
-  Home,
-  Car,
-  MoreHorizontal,
-  X,
-  Loader2,
-  Sparkles,
-} from "lucide-react";
+import { X, Loader2, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DEFAULT_CATEGORIES, PAYMENT_METHODS } from "@/lib/categories";
+import { CategoryIcon } from "@/lib/icons";
 import type { PaymentMethod } from "@/lib/types";
 import { getCurrencySymbol } from "@/lib/currency";
-import { createSubscriptionAction, type NewSubscriptionInput } from "@/app/(dashboard)/actions";
-
-const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
-  UtensilsCrossed,
-  Gamepad2,
-  Wrench,
-  Heart,
-  GraduationCap,
-  ShoppingBag,
-  Home,
-  Car,
-  MoreHorizontal,
-};
+import {
+  createSubscriptionAction,
+  type NewSubscriptionInput,
+  type SubscriptionWithCategory,
+} from "@/app/(dashboard)/actions";
 
 // Popular subscription presets for quick tap
 const POPULAR_PRESETS = [
@@ -45,27 +25,19 @@ const POPULAR_PRESETS = [
   { name: "Amazon Prime", nameEn: "Amazon Prime", amount: "19,90", category: "Compras", categoryEn: "Shopping", icon: "ShoppingBag", color: "#00A8E1", dueDay: 12 },
 ];
 
-export interface SubscriptionItem {
-  id: string;
-  name: string;
-  amount: number;
-  due_day: number;
-  payment_method: PaymentMethod;
-  category_name: string;
-  category_icon: string;
-  category_color: string;
-  is_active: boolean;
-}
+export type SubscriptionItem = SubscriptionWithCategory;
 
 interface SubscriptionDrawerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  currency?: string;
   onCreated?: (sub: SubscriptionItem) => void;
 }
 
 export function SubscriptionDrawer({
   open,
   onOpenChange,
+  currency,
   onCreated,
 }: SubscriptionDrawerProps) {
   const t = useTranslations("NewSubscription");
@@ -73,12 +45,12 @@ export function SubscriptionDrawer({
   const isEn = locale.startsWith("en");
   const [isPending, startTransition] = useTransition();
 
-  // Form state
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [dueDay, setDueDay] = useState("10");
   const [selectedCategory, setSelectedCategory] = useState<number>(0);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("credit");
+  const [error, setError] = useState<string | null>(null);
 
   const expenseCategories = DEFAULT_CATEGORIES.filter(
     (cat) => cat.type === "expense"
@@ -90,9 +62,10 @@ export function SubscriptionDrawer({
     setDueDay("10");
     setSelectedCategory(0);
     setPaymentMethod("credit");
+    setError(null);
   }
 
-  function handleSelectPreset(preset: typeof POPULAR_PRESETS[0]) {
+  function handleSelectPreset(preset: (typeof POPULAR_PRESETS)[0]) {
     setName(isEn ? preset.nameEn : preset.name);
     setAmount(isEn ? preset.amount.replace(",", ".") : preset.amount);
     setDueDay(String(preset.dueDay));
@@ -110,13 +83,20 @@ export function SubscriptionDrawer({
     const parsedAmount = parseFloat(amount.replace(",", "."));
     const parsedDay = parseInt(dueDay, 10);
     const cat = expenseCategories[selectedCategory];
+    setError(null);
 
     const inputData: NewSubscriptionInput = {
       name,
       amount: parsedAmount,
       due_day: parsedDay,
       payment_method: paymentMethod,
-      category_name: cat ? (isEn ? cat.nameEn : cat.name) : (isEn ? "Services" : "Serviços"),
+      category_name: cat
+        ? isEn
+          ? cat.nameEn
+          : cat.name
+        : isEn
+        ? "Services"
+        : "Serviços",
       category_icon: cat?.icon ?? "Wrench",
       category_color: cat?.color ?? "#3B82F6",
     };
@@ -124,22 +104,14 @@ export function SubscriptionDrawer({
     startTransition(async () => {
       const result = await createSubscriptionAction(inputData);
 
-      if (result.success) {
+      if (result.success && result.subscription) {
         if (onCreated) {
-          onCreated({
-            id: `sub_${Date.now()}`,
-            name: inputData.name,
-            amount: inputData.amount,
-            due_day: inputData.due_day,
-            payment_method: inputData.payment_method,
-            category_name: inputData.category_name || (isEn ? "Services" : "Serviços"),
-            category_icon: inputData.category_icon || "Wrench",
-            category_color: inputData.category_color || "#3B82F6",
-            is_active: true,
-          });
+          onCreated(result.subscription);
         }
         resetForm();
         onOpenChange(false);
+      } else if (result.error) {
+        setError(result.error);
       }
     });
   }
@@ -165,9 +137,7 @@ export function SubscriptionDrawer({
               <Drawer.Title className="text-lg font-semibold text-white">
                 {t("title")}
               </Drawer.Title>
-              <p className="text-xs text-muted-foreground">
-                {t("subtitle")}
-              </p>
+              <p className="text-xs text-muted-foreground">{t("subtitle")}</p>
             </div>
             <Drawer.Close asChild>
               <button
@@ -181,6 +151,12 @@ export function SubscriptionDrawer({
 
           {/* Scrollable content */}
           <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5 no-scrollbar">
+            {error && (
+              <div className="rounded-xl border border-accent-red/30 bg-accent-red/10 px-3.5 py-2.5 text-xs text-accent-red">
+                {error}
+              </div>
+            )}
+
             {/* Quick Suggestions */}
             <div>
               <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground mb-2">
@@ -235,7 +211,7 @@ export function SubscriptionDrawer({
               </label>
               <div className="mt-1.5 flex items-center gap-2 rounded-xl border border-white/10 bg-background px-4 py-3 focus-within:border-accent-blue focus-within:ring-1 focus-within:ring-accent-blue/30">
                 <span className="text-xl font-bold text-accent-blue">
-                  {getCurrencySymbol()}
+                  {getCurrencySymbol(currency)}
                 </span>
                 <input
                   type="text"
@@ -276,7 +252,10 @@ export function SubscriptionDrawer({
                   max="31"
                   value={dueDay}
                   onChange={(e) => {
-                    const val = Math.max(1, Math.min(31, parseInt(e.target.value, 10) || 1));
+                    const val = Math.max(
+                      1,
+                      Math.min(31, parseInt(e.target.value, 10) || 1)
+                    );
                     setDueDay(String(val));
                   }}
                   className="w-14 text-center rounded-lg border border-white/10 bg-background py-1.5 text-sm font-semibold tabular-nums text-foreground outline-none focus:border-accent-blue"
@@ -291,7 +270,6 @@ export function SubscriptionDrawer({
               </label>
               <div className="mt-2 grid grid-cols-4 gap-2">
                 {expenseCategories.map((cat, idx) => {
-                  const Icon = ICON_MAP[cat.icon] || MoreHorizontal;
                   const catLabel = isEn ? cat.nameEn : cat.name;
                   return (
                     <button
@@ -309,7 +287,8 @@ export function SubscriptionDrawer({
                         className="flex h-9 w-9 items-center justify-center rounded-full"
                         style={{ backgroundColor: `${cat.color}20` }}
                       >
-                        <Icon
+                        <CategoryIcon
+                          name={cat.icon}
                           className="h-4 w-4"
                           style={{ color: cat.color }}
                         />
