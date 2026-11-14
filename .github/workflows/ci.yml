@@ -2,36 +2,77 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: ["main", "feature/**"]
   pull_request:
-    branches: [main]
+    branches: ["main"]
 
 jobs:
   lint-and-typecheck:
-    name: Lint & Type Check
+    name: Lint, Typecheck, Unit Tests & Build
     runs-on: ubuntu-latest
 
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-anon-key
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: npm
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint
+      - name: Run ESLint
         run: npm run lint
 
-      - name: Type Check
+      - name: Run TypeScript typecheck
         run: npx tsc --noEmit
 
-      - name: Build
+      - name: Run unit tests
+        run: npm test
+
+      - name: Build Next.js application
         run: npm run build
-        env:
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-anon-key' }}
+
+  e2e:
+    name: Playwright E2E (Optional)
+    needs: lint-and-typecheck
+    if: ${{ vars.ENABLE_E2E == 'true' }}
+    runs-on: ubuntu-latest
+
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      E2E_USER_EMAIL: ${{ secrets.E2E_USER_EMAIL }}
+      E2E_USER_PASSWORD: ${{ secrets.E2E_USER_PASSWORD }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build and run E2E suite
+        run: |
+          npm run build
+          npx next start -p 3000 &
+          SERVER_PID=$!
+          npx wait-on http://localhost:3000 || sleep 5
+          npm run test:e2e
+          kill $SERVER_PID
