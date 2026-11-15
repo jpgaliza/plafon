@@ -64,7 +64,7 @@
 
 /* ─── Light theme (not primary, but needed for shadcn fallback) ─── */
 :root {
-  --background: #ffffff;
+  --background: #FAFAFA;
   --foreground: #09090B;
   --card: #ffffff;
   --card-foreground: #09090B;

@@ -78,7 +78,7 @@ export function DashboardClient({
           </p>
 
           {budget.monthlyBudget > 0 ? (
-            <div className="mt-4 pt-3 border-t border-white/10 space-y-1.5">
+            <div className="mt-4 pt-3 border-t border-border/60 dark:border-white/10 space-y-1.5">
               <div className="flex items-center justify-between text-xs gap-2">
                 <span className="text-muted-foreground font-medium">
                   {t("spendingCeiling")}
@@ -96,7 +96,7 @@ export function DashboardClient({
                   {budget.isOverBudget ? t("exceeded") : t("remaining")}
                 </span>
               </div>
-              <div className="h-1.5 w-full rounded-full bg-white/10 overflow-hidden">
+              <div className="h-1.5 w-full rounded-full bg-muted dark:bg-white/10 overflow-hidden">
                 <div
                   className={cn(
                     "h-full rounded-full transition-all duration-500",
@@ -128,47 +128,47 @@ export function DashboardClient({
         </FadeIn>
 
         {/* Income / Expense Cards */}
-        <div className="mt-4 md:mt-0 grid grid-cols-2 md:grid-cols-2 md:col-span-2 gap-3 md:gap-4">
+        <div className="mt-4 md:mt-0 grid grid-cols-2 md:grid-cols-2 md:col-span-2 gap-2.5 min-[360px]:gap-3 md:gap-4">
           <FadeIn
             delay={0.3}
-            className="rounded-xl border border-border bg-card p-4 md:p-5 flex flex-col justify-center"
+            className="rounded-xl border border-border bg-card p-2.5 min-[360px]:p-3 sm:p-4 md:p-5 flex flex-col justify-center min-w-0"
           >
-            <div className="flex justify-between items-start">
-              <div>
+            <div className="flex justify-between items-start gap-1 min-[360px]:gap-1.5 min-w-0">
+              <div className="min-w-0 flex-1">
                 <p className="text-xs md:text-sm text-muted-foreground">
                   {t("income")}
                 </p>
                 <p
                   data-testid="dashboard-income"
-                  className="mt-1 text-lg md:text-2xl font-bold tabular-nums text-accent-green"
+                  className="mt-1 text-xs min-[360px]:text-sm sm:text-lg md:text-2xl font-bold tabular-nums text-accent-green truncate"
                 >
                   {formatCurrency(income, currency, locale)}
                 </p>
               </div>
-              <div className="rounded-full bg-accent-green/10 p-1.5 md:p-2">
-                <ArrowUpRight className="h-4 w-4 md:h-5 md:w-5 text-accent-green" />
+              <div className="rounded-full bg-accent-green/10 p-1 min-[360px]:p-1.5 md:p-2 shrink-0">
+                <ArrowUpRight className="h-3.5 w-3.5 min-[360px]:h-4 min-[360px]:w-4 md:h-5 md:w-5 text-accent-green" />
               </div>
             </div>
           </FadeIn>
 
           <FadeIn
             delay={0.4}
-            className="rounded-xl border border-border bg-card p-4 md:p-5 flex flex-col justify-center"
+            className="rounded-xl border border-border bg-card p-2.5 min-[360px]:p-3 sm:p-4 md:p-5 flex flex-col justify-center min-w-0"
           >
-            <div className="flex justify-between items-start">
-              <div>
+            <div className="flex justify-between items-start gap-1 min-[360px]:gap-1.5 min-w-0">
+              <div className="min-w-0 flex-1">
                 <p className="text-xs md:text-sm text-muted-foreground">
                   {t("expenses")}
                 </p>
                 <p
                   data-testid="dashboard-expenses"
-                  className="mt-1 text-lg md:text-2xl font-bold tabular-nums text-accent-red"
+                  className="mt-1 text-xs min-[360px]:text-sm sm:text-lg md:text-2xl font-bold tabular-nums text-accent-red truncate"
                 >
                   {formatCurrency(expenses, currency, locale)}
                 </p>
               </div>
-              <div className="rounded-full bg-accent-red/10 p-1.5 md:p-2">
-                <ArrowDownRight className="h-4 w-4 md:h-5 md:w-5 text-accent-red" />
+              <div className="rounded-full bg-accent-red/10 p-1 min-[360px]:p-1.5 md:p-2 shrink-0">
+                <ArrowDownRight className="h-3.5 w-3.5 min-[360px]:h-4 min-[360px]:w-4 md:h-5 md:w-5 text-accent-red" />
               </div>
             </div>
           </FadeIn>
@@ -198,7 +198,7 @@ export function DashboardClient({
           {recentTransactions.length === 0 ? (
             <FadeIn
               delay={0.7}
-              className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/15 bg-card/40 py-12 px-4 text-center"
+              className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border dark:border-white/15 bg-card/40 py-12 px-4 text-center"
             >
               <Receipt className="h-10 w-10 text-muted-foreground/30 mb-3" />
               <p className="text-sm font-medium text-foreground">

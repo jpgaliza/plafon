@@ -69,7 +69,7 @@ export function BottomNav() {
                 )}
               >
                 <Icon className="h-5 w-5 shrink-0" />
-                <span className="truncate max-w-[62px] text-center leading-tight">
+                <span className="truncate max-w-full px-0.5 text-center leading-tight">
                   {t(item.labelKey)}
                 </span>
               </Link>

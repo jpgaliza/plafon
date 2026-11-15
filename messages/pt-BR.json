@@ -117,6 +117,11 @@
     "name": "Nome do serviço / assinatura",
     "namePlaceholder": "Ex: Netflix, Spotify, Academia...",
     "amount": "Valor mensal",
+    "annualAmount": "Valor anual",
+    "billingCycle": "Ciclo de cobrança",
+    "monthly": "Mensal",
+    "annual": "Anual",
+    "monthlyEquivalent": "Equivalente a {amount}/mês no Radar de Assinaturas",
     "dueDay": "Dia do vencimento",
     "dueDayLabel": "Todo dia {day}",
     "category": "Categoria",
@@ -139,6 +144,7 @@
     "groups": "Grupos",
     "groupsOptional": "opcional",
     "createGroupInline": "Criar grupo",
+    "cancelGroupInline": "Cancelar",
     "groupNamePlaceholder": "Nome do grupo...",
     "addGroupConfirm": "Criar"
   },
@@ -249,5 +255,11 @@
     "resettingPassword": "Salvando nova senha...",
     "passwordResetSuccessTitle": "Senha redefinida com sucesso!",
     "passwordResetSuccessMessage": "Sua nova senha foi salva. Faça login para continuar."
+  },
+  "NotFound": {
+    "code": "Erro 404",
+    "title": "Página não encontrada",
+    "description": "O endereço que você tentou acessar não existe ou foi removido.",
+    "backToDashboard": "Voltar ao Dashboard"
   }
 }

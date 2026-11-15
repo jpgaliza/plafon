@@ -101,7 +101,7 @@ export function TransactionRow({
             onClick={() => onEdit(tx)}
             title={t("editTransaction")}
             aria-label={t("editTransaction")}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-transparent text-muted-foreground/70 transition-all hover:border-white/10 hover:bg-white/5 hover:text-foreground cursor-pointer disabled:opacity-40"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-transparent text-muted-foreground/70 transition-all hover:border-border dark:hover:border-white/10 hover:bg-muted dark:hover:bg-white/5 hover:text-foreground cursor-pointer disabled:opacity-40"
           >
             <Pencil className="h-3.5 w-3.5" />
           </button>
@@ -142,7 +142,7 @@ export function TransactionRow({
               onClick={() => setConfirmingDelete(false)}
               title={tCommon("cancel")}
               aria-label={tCommon("cancel")}
-              className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-border dark:border-white/10 bg-muted dark:bg-white/5 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
             >
               <X className="h-3.5 w-3.5" />
             </button>

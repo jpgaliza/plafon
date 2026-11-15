@@ -50,7 +50,7 @@ export function RegisterForm() {
         {/* Card */}
         <FadeIn
           delay={0.1}
-          className="rounded-2xl border border-white/10 bg-[#121215]/90 backdrop-blur-xl p-6 sm:p-8 shadow-2xl shadow-black/80 ring-1 ring-white/5"
+          className="rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/90 backdrop-blur-xl p-6 sm:p-8 shadow-xl dark:shadow-2xl dark:shadow-black/80 ring-1 ring-border/50 dark:ring-white/5"
         >
           {/* Brand header */}
           <div className="flex flex-col items-center text-center mb-6">
@@ -62,12 +62,12 @@ export function RegisterForm() {
                 <span className="absolute right-1 top-1 h-4 w-[3px] bg-foreground" />
                 <span className="absolute left-1 bottom-[10px] h-[3px] w-4 bg-foreground" />
               </div>
-              <span className="font-bold text-xl tracking-tight text-white">
+              <span className="font-bold text-xl tracking-tight text-foreground dark:text-white">
                 Plafon
               </span>
             </Link>
 
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground dark:text-white">
               {t("registerTitle")}
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground mt-1">
@@ -80,10 +80,10 @@ export function RegisterForm() {
             <div className="mb-5 flex items-start gap-2.5 rounded-xl border border-accent-green/30 bg-accent-green/10 p-4 text-xs text-accent-green animate-in fade-in duration-200">
               <CheckCircle2 className="h-5 w-5 shrink-0 mt-0.5" />
               <div>
-                <p className="font-semibold text-white mb-1">
+                <p className="font-semibold text-foreground dark:text-white mb-1">
                   Conta registrada com sucesso!
                 </p>
-                <p className="leading-relaxed text-zinc-300">
+                <p className="leading-relaxed text-foreground/80 dark:text-zinc-300">
                   {t("checkEmailNotice")}
                 </p>
                 <Link
@@ -108,7 +108,7 @@ export function RegisterForm() {
           <form action={formAction} className="space-y-4">
             {/* Name input */}
             <div>
-              <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+              <label className="block text-xs font-medium text-foreground/80 dark:text-zinc-300 mb-1.5">
                 {t("nameLabel")}
               </label>
               <div className="relative flex items-center">
@@ -118,14 +118,14 @@ export function RegisterForm() {
                   name="name"
                   required
                   placeholder={t("namePlaceholder")}
-                  className="w-full rounded-xl border border-white/10 bg-background pl-10 pr-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/40 focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
+                  className="w-full rounded-xl border border-border dark:border-white/10 bg-background pl-10 pr-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/40 focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
                 />
               </div>
             </div>
 
             {/* Email input */}
             <div>
-              <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+              <label className="block text-xs font-medium text-foreground/80 dark:text-zinc-300 mb-1.5">
                 {t("emailLabel")}
               </label>
               <div className="relative flex items-center">
@@ -135,14 +135,14 @@ export function RegisterForm() {
                   name="email"
                   required
                   placeholder={t("emailPlaceholder")}
-                  className="w-full rounded-xl border border-white/10 bg-background pl-10 pr-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/40 focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
+                  className="w-full rounded-xl border border-border dark:border-white/10 bg-background pl-10 pr-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/40 focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
                 />
               </div>
             </div>
 
             {/* Password input */}
             <div>
-              <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+              <label className="block text-xs font-medium text-foreground/80 dark:text-zinc-300 mb-1.5">
                 {t("passwordLabel")}
               </label>
               <div className="relative flex items-center">
@@ -153,7 +153,7 @@ export function RegisterForm() {
                   required
                   minLength={6}
                   placeholder={t("passwordPlaceholder")}
-                  className="w-full rounded-xl border border-white/10 bg-background pl-10 pr-11 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/40 focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
+                  className="w-full rounded-xl border border-border dark:border-white/10 bg-background pl-10 pr-11 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/40 focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
                 />
                 <button
                   type="button"
@@ -172,7 +172,7 @@ export function RegisterForm() {
 
             {/* Confirm Password input */}
             <div>
-              <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+              <label className="block text-xs font-medium text-foreground/80 dark:text-zinc-300 mb-1.5">
                 {t("confirmPasswordLabel")}
               </label>
               <div className="relative flex items-center">
@@ -183,7 +183,7 @@ export function RegisterForm() {
                   required
                   minLength={6}
                   placeholder={t("confirmPasswordPlaceholder")}
-                  className="w-full rounded-xl border border-white/10 bg-background pl-10 pr-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/40 focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
+                  className="w-full rounded-xl border border-border dark:border-white/10 bg-background pl-10 pr-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/40 focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
                 />
               </div>
             </div>
@@ -206,7 +206,7 @@ export function RegisterForm() {
           </form>
 
           {/* Footer link to login */}
-          <div className="mt-6 pt-5 border-t border-white/5 text-center text-xs text-muted-foreground">
+          <div className="mt-6 pt-5 border-t border-border/60 dark:border-white/5 text-center text-xs text-muted-foreground">
             <span>{t("hasAccount")} </span>
             <Link
               href="/login"

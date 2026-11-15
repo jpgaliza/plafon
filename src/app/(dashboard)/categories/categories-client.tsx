@@ -157,7 +157,7 @@ export function CategoriesClient({
       <div className="md:grid md:grid-cols-2 md:gap-8">
         {/* Chart View */}
         <FadeIn delay={0.2}>
-          <div className="rounded-2xl border border-border bg-card p-6 md:p-8 flex flex-col items-center justify-center shadow-sm">
+          <div className="rounded-2xl border border-border bg-card p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center shadow-sm">
             <h2 className="text-lg font-semibold w-full mb-6">
               {t("monthlySummary")}
             </h2>
@@ -167,16 +167,16 @@ export function CategoriesClient({
                 currency={currency}
                 locale={locale}
                 className="w-full h-full"
-                innerRadius={100}
-                outerRadius={130}
+                innerRadius="62%"
+                outerRadius="82%"
               />
               {totalExpenses > 0 && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none w-[180px] h-[180px] m-auto rounded-full overflow-hidden px-4 text-center">
-                  <span className="text-sm text-muted-foreground">
+                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none w-[54%] h-[54%] m-auto rounded-full overflow-hidden px-3 text-center">
+                  <span className="text-xs sm:text-sm text-muted-foreground">
                     {t("total")}
                   </span>
                   <span
-                    className="text-xl md:text-2xl font-bold text-foreground truncate w-full"
+                    className="text-base sm:text-xl md:text-2xl font-bold text-foreground truncate w-full tabular-nums"
                     title={formatCurrency(totalExpenses, currency, locale)}
                   >
                     {formatCurrency(totalExpenses, currency, locale)}
@@ -211,7 +211,7 @@ export function CategoriesClient({
 
           {categoryDetails.length === 0 ? (
             <FadeIn delay={0.35}>
-              <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/15 bg-card/40 py-14 px-4 text-center">
+              <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border dark:border-white/15 bg-card/40 py-14 px-4 text-center">
                 <PieChart className="h-10 w-10 text-muted-foreground/30 mb-3" />
                 <p className="text-sm font-medium text-foreground">
                   {t("noData")}

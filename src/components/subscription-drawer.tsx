@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { DEFAULT_CATEGORIES, PAYMENT_METHODS } from "@/lib/categories";
 import { CategoryIcon } from "@/lib/icons";
 import type { PaymentMethod } from "@/lib/types";
-import { getCurrencySymbol } from "@/lib/currency";
+import { formatCurrency, getCurrencySymbol } from "@/lib/currency";
 import {
   createSubscriptionAction,
   type NewSubscriptionInput,
@@ -46,6 +46,7 @@ export function SubscriptionDrawer({
   const [isPending, startTransition] = useTransition();
 
   const [name, setName] = useState("");
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">("monthly");
   const [amount, setAmount] = useState("");
   const [dueDay, setDueDay] = useState("10");
   const [selectedCategory, setSelectedCategory] = useState<number>(0);
@@ -58,6 +59,7 @@ export function SubscriptionDrawer({
 
   function resetForm() {
     setName("");
+    setBillingCycle("monthly");
     setAmount("");
     setDueDay("10");
     setSelectedCategory(0);
@@ -65,8 +67,16 @@ export function SubscriptionDrawer({
     setError(null);
   }
 
+  function handleOpenChange(nextOpen: boolean) {
+    if (!nextOpen) {
+      resetForm();
+    }
+    onOpenChange(nextOpen);
+  }
+
   function handleSelectPreset(preset: (typeof POPULAR_PRESETS)[0]) {
     setName(isEn ? preset.nameEn : preset.name);
+    setBillingCycle("monthly");
     setAmount(isEn ? preset.amount.replace(",", ".") : preset.amount);
     setDueDay(String(preset.dueDay));
     const catIdx = expenseCategories.findIndex(
@@ -79,15 +89,20 @@ export function SubscriptionDrawer({
     }
   }
 
+  const parsedAmount = parseFloat(amount.replace(",", "."));
+  const effectiveMonthlyAmount =
+    billingCycle === "annual"
+      ? Math.round((parsedAmount / 12) * 100) / 100
+      : parsedAmount;
+
   function handleSubmit() {
-    const parsedAmount = parseFloat(amount.replace(",", "."));
     const parsedDay = parseInt(dueDay, 10);
     const cat = expenseCategories[selectedCategory];
     setError(null);
 
     const inputData: NewSubscriptionInput = {
       name,
-      amount: parsedAmount,
+      amount: effectiveMonthlyAmount,
       due_day: parsedDay,
       payment_method: paymentMethod,
       category_name: cat
@@ -119,22 +134,25 @@ export function SubscriptionDrawer({
   const isFormValid =
     name.trim().length > 0 &&
     amount.length > 0 &&
-    parseFloat(amount.replace(",", ".")) > 0 &&
+    Number.isFinite(parsedAmount) &&
+    parsedAmount > 0 &&
+    Number.isFinite(effectiveMonthlyAmount) &&
+    effectiveMonthlyAmount > 0 &&
     parseInt(dueDay, 10) >= 1 &&
     parseInt(dueDay, 10) <= 31;
 
   return (
-    <Drawer.Root open={open} onOpenChange={onOpenChange}>
+    <Drawer.Root open={open} onOpenChange={handleOpenChange}>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs" />
-        <Drawer.Content className="fixed inset-x-0 bottom-0 z-50 mx-auto flex max-h-[92vh] w-full max-w-lg flex-col overflow-x-hidden rounded-t-2xl border-t border-white/10 bg-[#121215] outline-none">
+        <Drawer.Content className="fixed inset-x-0 bottom-0 md:left-64 md:bottom-4 z-50 mx-auto flex max-h-[92vh] md:max-h-[88vh] w-full max-w-lg flex-col overflow-hidden no-scrollbar rounded-t-2xl md:rounded-2xl border-t md:border border-border dark:border-white/10 bg-card dark:bg-[#121215] md:shadow-2xl outline-none">
           {/* Handle */}
           <Drawer.Handle className="mx-auto mb-2 mt-3 h-1.5 w-12 rounded-full bg-muted-foreground/30" />
 
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-white/5 px-5 pb-3">
+          <div className="flex items-center justify-between border-b border-border/60 dark:border-white/5 px-5 pb-3">
             <div>
-              <Drawer.Title className="text-lg font-semibold text-white">
+              <Drawer.Title className="text-lg font-semibold text-foreground">
                 {t("title")}
               </Drawer.Title>
               <p className="text-xs text-muted-foreground">{t("subtitle")}</p>
@@ -142,7 +160,7 @@ export function SubscriptionDrawer({
             <Drawer.Close asChild>
               <button
                 type="button"
-                className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-white/5 hover:text-white cursor-pointer"
+                className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-muted dark:hover:bg-white/5 hover:text-foreground cursor-pointer"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -150,7 +168,7 @@ export function SubscriptionDrawer({
           </div>
 
           {/* Scrollable content */}
-          <div className="flex-1 w-full overflow-y-auto overflow-x-hidden px-5 py-4 space-y-5 no-scrollbar">
+          <div className="flex-1 min-h-0 w-full overflow-y-auto overflow-x-hidden px-5 py-4 space-y-5 no-scrollbar">
             {error && (
               <div className="rounded-xl border border-accent-red/30 bg-accent-red/10 px-3.5 py-2.5 text-xs text-accent-red">
                 {error}
@@ -175,8 +193,8 @@ export function SubscriptionDrawer({
                       className={cn(
                         "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-all cursor-pointer select-none",
                         isSelected
-                          ? "border-accent-blue bg-accent-blue/15 text-white ring-1 ring-accent-blue shadow-sm"
-                          : "border-white/10 bg-white/5 text-zinc-300 hover:bg-white/10 hover:border-white/20 active:scale-95"
+                          ? "border-accent-blue bg-accent-blue/15 text-accent-blue dark:text-white ring-1 ring-accent-blue shadow-sm"
+                          : "border-border dark:border-white/10 bg-muted/60 dark:bg-white/5 text-foreground/80 dark:text-zinc-300 hover:bg-muted dark:hover:bg-white/10 hover:border-foreground/20 dark:hover:border-white/20 active:scale-95"
                       )}
                     >
                       <span
@@ -200,16 +218,51 @@ export function SubscriptionDrawer({
                 placeholder={t("namePlaceholder")}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="mt-1.5 w-full rounded-xl border border-white/10 bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/40 focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
+                className="mt-1.5 w-full rounded-xl border border-border dark:border-white/10 bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/40 focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
               />
+            </div>
+
+            {/* Billing Cycle */}
+            <div>
+              <label className="text-xs font-medium text-muted-foreground">
+                {t("billingCycle")}
+              </label>
+              <div className="mt-1.5 flex gap-1 rounded-xl bg-muted p-1">
+                <button
+                  type="button"
+                  data-testid="subscription-cycle-monthly"
+                  onClick={() => setBillingCycle("monthly")}
+                  className={cn(
+                    "flex-1 rounded-lg py-2 text-xs font-semibold transition-all cursor-pointer",
+                    billingCycle === "monthly"
+                      ? "bg-background text-foreground shadow-xs"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  {t("monthly")}
+                </button>
+                <button
+                  type="button"
+                  data-testid="subscription-cycle-annual"
+                  onClick={() => setBillingCycle("annual")}
+                  className={cn(
+                    "flex-1 rounded-lg py-2 text-xs font-semibold transition-all cursor-pointer",
+                    billingCycle === "annual"
+                      ? "bg-background text-foreground shadow-xs"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  {t("annual")}
+                </button>
+              </div>
             </div>
 
             {/* Amount input */}
             <div>
               <label className="text-xs font-medium text-muted-foreground">
-                {t("amount")}
+                {billingCycle === "annual" ? t("annualAmount") : t("amount")}
               </label>
-              <div className="mt-1.5 flex items-center gap-2 rounded-xl border border-white/10 bg-background px-4 py-3 focus-within:border-accent-blue focus-within:ring-1 focus-within:ring-accent-blue/30">
+              <div className="mt-1.5 flex items-center gap-2 rounded-xl border border-border dark:border-white/10 bg-background px-4 py-3 focus-within:border-accent-blue focus-within:ring-1 focus-within:ring-accent-blue/30">
                 <span className="text-xl font-bold text-accent-blue">
                   {getCurrencySymbol(currency)}
                 </span>
@@ -225,6 +278,22 @@ export function SubscriptionDrawer({
                   className="min-w-0 w-full flex-1 bg-transparent text-2xl font-bold tabular-nums text-foreground outline-none placeholder:text-muted-foreground/40"
                 />
               </div>
+              {billingCycle === "annual" &&
+                Number.isFinite(parsedAmount) &&
+                parsedAmount > 0 && (
+                  <p
+                    data-testid="subscription-annual-preview"
+                    className="mt-1.5 text-xs font-medium text-accent-blue tabular-nums"
+                  >
+                    {t("monthlyEquivalent", {
+                      amount: formatCurrency(
+                        effectiveMonthlyAmount,
+                        currency,
+                        locale
+                      ),
+                    })}
+                  </p>
+                )}
             </div>
 
             {/* Due Day */}
@@ -258,7 +327,7 @@ export function SubscriptionDrawer({
                     );
                     setDueDay(String(val));
                   }}
-                  className="w-14 text-center rounded-lg border border-white/10 bg-background py-1.5 text-sm font-semibold tabular-nums text-foreground outline-none focus:border-accent-blue"
+                  className="w-14 text-center rounded-lg border border-border dark:border-white/10 bg-background py-1.5 text-sm font-semibold tabular-nums text-foreground outline-none focus:border-accent-blue"
                 />
               </div>
             </div>
@@ -279,8 +348,8 @@ export function SubscriptionDrawer({
                       className={cn(
                         "flex flex-col items-center gap-1.5 rounded-xl px-1 py-2.5 text-xs transition-all cursor-pointer",
                         selectedCategory === idx
-                          ? "bg-white/10 ring-2 ring-accent-blue"
-                          : "hover:bg-white/5"
+                          ? "bg-muted dark:bg-white/10 ring-2 ring-accent-blue"
+                          : "hover:bg-muted/60 dark:hover:bg-white/5"
                       )}
                     >
                       <div

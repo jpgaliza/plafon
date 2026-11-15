@@ -35,7 +35,7 @@ export function TransactionDrawer({
     <Drawer.Root open={open} onOpenChange={onOpenChange}>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-50 bg-black/60" />
-        <Drawer.Content className="fixed inset-x-0 bottom-0 z-50 mx-auto flex max-h-[92vh] w-full max-w-lg flex-col overflow-x-hidden rounded-t-2xl bg-card outline-none">
+        <Drawer.Content className="fixed inset-x-0 bottom-0 md:left-64 md:bottom-4 z-50 mx-auto flex max-h-[92vh] md:max-h-[88vh] w-full max-w-lg flex-col overflow-hidden no-scrollbar rounded-t-2xl md:rounded-2xl border-t md:border border-border dark:border-white/10 bg-card md:shadow-2xl outline-none">
           <Drawer.Handle className="mx-auto mb-2 mt-3 h-1.5 w-12 rounded-full bg-muted-foreground/30" />
           {open ? (
             <TransactionDrawerForm
@@ -81,9 +81,8 @@ function TransactionDrawerForm({
   const [type, setType] = useState<TransactionType>(initialType);
   const [amount, setAmount] = useState(() => {
     if (!transaction) return "";
-    return isEn
-      ? String(transaction.amount)
-      : String(transaction.amount).replace(".", ",");
+    const formatted = Number(transaction.amount).toFixed(2);
+    return isEn ? formatted : formatted.replace(".", ",");
   });
   const [description, setDescription] = useState(
     () => transaction?.description ?? ""
@@ -215,7 +214,7 @@ function TransactionDrawerForm({
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 w-full overflow-y-auto overflow-x-hidden px-4 pb-8 no-scrollbar">
+      <div className="flex-1 min-h-0 w-full overflow-y-auto overflow-x-hidden px-4 pb-8 no-scrollbar">
         {/* Type toggle */}
         <div className="flex gap-1 rounded-xl bg-muted p-1">
           <button
@@ -412,12 +411,27 @@ function TransactionDrawerForm({
             </label>
             <button
               type="button"
-              onClick={() => setShowInlineGroup((prev) => !prev)}
+              onClick={() => {
+                setShowInlineGroup((prev) => {
+                  const next = !prev;
+                  if (!next) setInlineGroupName("");
+                  return next;
+                });
+              }}
               data-testid="tx-drawer-create-group-toggle"
               className="inline-flex items-center gap-1 text-xs font-medium text-accent-blue hover:underline cursor-pointer"
             >
-              <FolderPlus className="h-3.5 w-3.5" />
-              <span>{t("createGroupInline")}</span>
+              {showInlineGroup ? (
+                <>
+                  <X className="h-3.5 w-3.5" />
+                  <span>{t("cancelGroupInline")}</span>
+                </>
+              ) : (
+                <>
+                  <FolderPlus className="h-3.5 w-3.5" />
+                  <span>{t("createGroupInline")}</span>
+                </>
+              )}
             </button>
           </div>
 
@@ -466,8 +480,8 @@ function TransactionDrawerForm({
                     className={cn(
                       "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-all cursor-pointer",
                       isSelected
-                        ? "border-accent-blue bg-accent-blue/15 text-white ring-1 ring-accent-blue"
-                        : "border-white/10 bg-muted/60 text-muted-foreground hover:text-foreground hover:border-white/20"
+                        ? "border-accent-blue bg-accent-blue/15 text-accent-blue dark:text-white ring-1 ring-accent-blue"
+                        : "border-border dark:border-white/10 bg-muted/60 text-muted-foreground hover:text-foreground hover:border-foreground/20 dark:hover:border-white/20"
                     )}
                   >
                     {isSelected && <Check className="h-3 w-3 text-accent-blue" />}
