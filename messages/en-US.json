@@ -117,6 +117,11 @@
     "name": "Service / subscription name",
     "namePlaceholder": "e.g. Netflix, Spotify, Gym...",
     "amount": "Monthly amount",
+    "annualAmount": "Annual amount",
+    "billingCycle": "Billing cycle",
+    "monthly": "Monthly",
+    "annual": "Annual",
+    "monthlyEquivalent": "Equivalent to {amount}/mo on Subscription Radar",
     "dueDay": "Due day",
     "dueDayLabel": "Every day {day}",
     "category": "Category",
@@ -139,6 +144,7 @@
     "groups": "Groups",
     "groupsOptional": "optional",
     "createGroupInline": "Create group",
+    "cancelGroupInline": "Cancel",
     "groupNamePlaceholder": "Group name...",
     "addGroupConfirm": "Create"
   },
@@ -249,5 +255,11 @@
     "resettingPassword": "Saving new password...",
     "passwordResetSuccessTitle": "Password reset successfully!",
     "passwordResetSuccessMessage": "Your new password has been saved. Please sign in to continue."
+  },
+  "NotFound": {
+    "code": "404 Error",
+    "title": "Page not found",
+    "description": "The page you are looking for does not exist or has been removed.",
+    "backToDashboard": "Back to Dashboard"
   }
 }

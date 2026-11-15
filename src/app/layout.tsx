@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
+import { ThemeSync } from "@/components/theme-sync";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -32,8 +33,10 @@ export default async function RootLayout({
     getMessages(),
   ]);
 
-  const theme = cookieStore.get("NEXT_THEME")?.value || "dark";
-  const themeClass = theme === "light" ? "" : "dark";
+  const rawTheme = cookieStore.get("NEXT_THEME")?.value || "dark";
+  const safeTheme: "dark" | "light" | "system" =
+    rawTheme === "light" || rawTheme === "system" ? rawTheme : "dark";
+  const themeClass = safeTheme === "light" ? "" : "dark";
 
   return (
     <html
@@ -41,7 +44,18 @@ export default async function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable}${themeClass ? ` ${themeClass}` : ""} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        {safeTheme === "system" && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html:
+                "(function(){try{var d=window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.classList.toggle('dark',d);}catch(e){}})();",
+            }}
+          />
+        )}
+      </head>
       <body className="min-h-full flex flex-col">
+        <ThemeSync theme={safeTheme} />
         <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>

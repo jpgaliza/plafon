@@ -178,7 +178,7 @@ export function SubscriptionsClient({
           {/* Total Monthly */}
           <FadeIn
             delay={0.2}
-            className="rounded-2xl border border-white/10 bg-card p-5 shadow-sm relative overflow-hidden"
+            className="rounded-2xl border border-border dark:border-white/10 bg-card p-5 shadow-sm relative overflow-hidden"
           >
             <div className="absolute top-0 right-0 p-4 opacity-10">
               <CreditCard className="h-16 w-16" />
@@ -203,7 +203,7 @@ export function SubscriptionsClient({
           {/* Active Subscriptions */}
           <FadeIn
             delay={0.25}
-            className="rounded-2xl border border-white/10 bg-card p-5 shadow-sm"
+            className="rounded-2xl border border-border dark:border-white/10 bg-card p-5 shadow-sm"
           >
             <div className="flex items-center justify-between">
               <p className="text-xs font-medium text-muted-foreground">
@@ -225,7 +225,7 @@ export function SubscriptionsClient({
           {/* Next Due Insight */}
           <FadeIn
             delay={0.3}
-            className="rounded-2xl border border-white/10 bg-card p-5 shadow-sm flex flex-col justify-between"
+            className="rounded-2xl border border-border dark:border-white/10 bg-card p-5 shadow-sm flex flex-col justify-between"
           >
             <div className="flex items-center justify-between">
               <p className="text-xs font-medium text-muted-foreground">
@@ -255,7 +255,7 @@ export function SubscriptionsClient({
 
         {/* Filters Tab & List Section */}
         <FadeIn delay={0.35} className="space-y-4">
-          <div className="flex items-center justify-center sm:justify-between border-b border-white/10 pb-3">
+          <div className="flex items-center justify-center sm:justify-between border-b border-border dark:border-white/10 pb-3">
             <div className="flex items-center justify-center gap-1 rounded-xl bg-muted/60 p-1 mx-auto sm:mx-0">
               {(
                 [
@@ -288,7 +288,7 @@ export function SubscriptionsClient({
                   )}
                 >
                   <span>{tab.label}</span>
-                  <span className="rounded-full bg-white/5 px-1.5 py-0.2 text-[10px]">
+                  <span className="rounded-full bg-muted dark:bg-white/5 px-1.5 py-0.2 text-[10px]">
                     {tab.count}
                   </span>
                 </button>
@@ -302,7 +302,7 @@ export function SubscriptionsClient({
 
           {/* Subscriptions Cards List */}
           {filteredList.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/15 bg-card/40 py-16 px-4 text-center">
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border dark:border-white/15 bg-card/40 py-16 px-4 text-center">
               <CreditCard className="h-12 w-12 text-muted-foreground/40 mb-3" />
               <p className="text-base font-semibold text-foreground">
                 {t("noSubscriptions")}
@@ -338,106 +338,113 @@ export function SubscriptionsClient({
                     key={sub.id}
                     data-testid={`subscription-card-${sub.id}`}
                     className={cn(
-                      "group relative flex items-center justify-between p-4 rounded-xl border transition-all duration-200",
+                      "group relative flex flex-col justify-between p-4 rounded-xl border transition-all duration-200",
                       sub.is_active
-                        ? "border-white/10 bg-card hover:border-white/20 hover:bg-card/80"
-                        : "border-white/5 bg-card/40 opacity-60 hover:opacity-80"
+                        ? "border-border dark:border-white/10 bg-card hover:border-foreground/20 dark:hover:border-white/20 hover:bg-card/80"
+                        : "border-border/60 dark:border-white/5 bg-card/40 opacity-60 hover:opacity-80"
                     )}
                   >
-                    <div className="flex items-center gap-3.5 min-w-0">
-                      {/* Service / Category Icon */}
-                      <div
-                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl shadow-xs"
-                        style={{
-                          backgroundColor: `${sub.category_color}18`,
-                          border: `1px solid ${sub.category_color}30`,
-                        }}
-                      >
-                        <CategoryIcon
-                          name={iconName}
-                          className="h-5 w-5"
-                          style={{ color: sub.category_color }}
-                        />
-                      </div>
+                    {/* Top Row: Icon + Title/Category + Monthly Amount */}
+                    <div className="flex items-center justify-between gap-2 min-w-0">
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
+                        {/* Service / Category Icon */}
+                        <div
+                          className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl shadow-xs"
+                          style={{
+                            backgroundColor: `${sub.category_color}18`,
+                            border: `1px solid ${sub.category_color}30`,
+                          }}
+                        >
+                          <CategoryIcon
+                            name={iconName}
+                            className="h-5 w-5"
+                            style={{ color: sub.category_color }}
+                          />
+                        </div>
 
-                      {/* Info */}
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2">
-                          <p className="font-semibold text-sm md:text-base text-foreground truncate">
+                        {/* Title & Category */}
+                        <div className="min-w-0 flex-1">
+                          <p className="font-semibold text-sm sm:text-base text-foreground truncate">
                             {sub.name}
                           </p>
-                          {!sub.is_active && (
-                            <span className="rounded-md bg-white/10 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
-                              {t("paused")}
-                            </span>
-                          )}
-                        </div>
-
-                        <div className="flex items-center gap-2 mt-0.5 text-xs text-muted-foreground">
-                          <span>{catLabel}</span>
-                          <span>•</span>
-                          <span
-                            className={cn(
-                              "font-medium",
-                              dueStatus.urgency === "high" &&
-                                "text-accent-red font-bold",
-                              dueStatus.urgency === "warning" &&
-                                "text-amber-400 font-semibold"
-                            )}
-                          >
-                            {dueStatus.label}
-                          </span>
+                          <p className="text-xs text-muted-foreground truncate mt-0.5">
+                            {catLabel}
+                          </p>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Right side: Amount & Controls */}
-                    <div className="flex items-center gap-3 shrink-0 ml-3">
-                      <div className="text-right">
-                        <p className="text-base font-bold text-foreground tabular-nums tracking-tight">
+                      {/* Monthly Amount */}
+                      <div className="text-right shrink-0 ml-2">
+                        <p className="text-sm sm:text-base font-bold text-foreground tabular-nums tracking-tight whitespace-nowrap">
                           {formatCurrency(sub.amount, currency, locale)}
                         </p>
                         <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
                           {t("perMonth")}
                         </p>
                       </div>
+                    </div>
 
-                      {/* Quick Toggle Active Button */}
-                      <button
-                        type="button"
-                        disabled={isPending}
-                        onClick={() => handleToggle(sub)}
-                        title={
-                          sub.is_active
-                            ? t("pauseSubscription")
-                            : t("reactivateSubscription")
-                        }
-                        aria-label={
-                          sub.is_active
-                            ? t("pauseSubscription")
-                            : t("reactivateSubscription")
-                        }
-                        className={cn(
-                          "flex h-8 w-8 items-center justify-center rounded-lg border transition-all cursor-pointer",
-                          sub.is_active
-                            ? "border-accent-green/30 bg-accent-green/10 text-accent-green hover:bg-accent-green/20"
-                            : "border-white/10 bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-white"
+                    {/* Bottom Row: Due Status / Paused Badge + Action Controls */}
+                    <div className="mt-3 pt-2.5 border-t border-border/60 dark:border-white/5 flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 min-w-0 flex-wrap">
+                        <span
+                          className={cn(
+                            "text-xs font-medium whitespace-nowrap",
+                            dueStatus.urgency === "high" &&
+                              "text-accent-red font-bold",
+                            dueStatus.urgency === "warning" &&
+                              "text-amber-500 dark:text-amber-400 font-semibold",
+                            dueStatus.urgency === "normal" &&
+                              "text-muted-foreground"
+                          )}
+                        >
+                          {dueStatus.label}
+                        </span>
+                        {!sub.is_active && (
+                          <span className="rounded-md bg-muted dark:bg-white/10 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground whitespace-nowrap">
+                            {t("paused")}
+                          </span>
                         )}
-                      >
-                        <Power className="h-3.5 w-3.5" />
-                      </button>
+                      </div>
 
-                      {/* Delete Button */}
-                      <button
-                        type="button"
-                        disabled={isPending}
-                        onClick={() => handleDelete(sub.id)}
-                        title={t("deleteSubscription")}
-                        aria-label={t("deleteSubscription")}
-                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-transparent text-muted-foreground/60 transition-all hover:border-accent-red/20 hover:bg-accent-red/10 hover:text-accent-red cursor-pointer"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </button>
+                      <div className="flex items-center gap-2 shrink-0">
+                        {/* Quick Toggle Active Button */}
+                        <button
+                          type="button"
+                          disabled={isPending}
+                          onClick={() => handleToggle(sub)}
+                          title={
+                            sub.is_active
+                              ? t("pauseSubscription")
+                              : t("reactivateSubscription")
+                          }
+                          aria-label={
+                            sub.is_active
+                              ? t("pauseSubscription")
+                              : t("reactivateSubscription")
+                          }
+                          className={cn(
+                            "flex h-8 w-8 items-center justify-center rounded-lg border transition-all cursor-pointer",
+                            sub.is_active
+                              ? "border-accent-green/30 bg-accent-green/10 text-accent-green hover:bg-accent-green/20"
+                              : "border-border dark:border-white/10 bg-muted dark:bg-white/5 text-muted-foreground hover:bg-muted/80 dark:hover:bg-white/10 hover:text-foreground dark:hover:text-white"
+                          )}
+                        >
+                          <Power className="h-3.5 w-3.5" />
+                        </button>
+
+                        {/* Delete Button */}
+                        <button
+                          type="button"
+                          disabled={isPending}
+                          onClick={() => handleDelete(sub.id)}
+                          title={t("deleteSubscription")}
+                          aria-label={t("deleteSubscription")}
+                          className="flex h-8 w-8 items-center justify-center rounded-lg border border-transparent text-muted-foreground/60 transition-all hover:border-accent-red/20 hover:bg-accent-red/10 hover:text-accent-red cursor-pointer"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 );

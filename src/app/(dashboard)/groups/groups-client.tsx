@@ -110,7 +110,7 @@ export function GroupsClient({
 
         {groups.length === 0 ? (
           <FadeIn delay={0.2}>
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-card/50 px-6 py-14 text-center">
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border dark:border-white/10 bg-card/50 px-6 py-14 text-center">
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-accent-blue/10 text-accent-blue mb-4">
                 <FolderKanban className="h-7 w-7" />
               </div>
@@ -138,7 +138,7 @@ export function GroupsClient({
                 <FadeIn
                   key={group.id}
                   delay={0.15 + index * 0.04}
-                  className="rounded-2xl border border-white/10 bg-card p-5 shadow-sm transition-colors hover:border-white/20 flex flex-col justify-between"
+                  className="rounded-2xl border border-border dark:border-white/10 bg-card p-5 shadow-sm transition-colors hover:border-foreground/20 dark:hover:border-white/20 flex flex-col justify-between"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <Link
@@ -171,7 +171,7 @@ export function GroupsClient({
                             title={t("renameGroup")}
                             aria-label={t("renameGroup")}
                             data-testid={`rename-group-${group.id}`}
-                            className="flex h-11 w-11 items-center justify-center rounded-xl border border-transparent text-muted-foreground/70 transition-colors hover:border-white/10 hover:bg-white/5 hover:text-foreground cursor-pointer disabled:opacity-40"
+                            className="flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center rounded-xl border border-transparent text-muted-foreground/70 transition-colors hover:border-border dark:hover:border-white/10 hover:bg-muted dark:hover:bg-white/5 hover:text-foreground cursor-pointer disabled:opacity-40"
                           >
                             <Pencil className="h-4 w-4" />
                           </button>
@@ -182,7 +182,7 @@ export function GroupsClient({
                             title={t("deleteGroup")}
                             aria-label={t("deleteGroup")}
                             data-testid={`delete-group-${group.id}`}
-                            className="flex h-11 w-11 items-center justify-center rounded-xl border border-transparent text-muted-foreground/70 transition-colors hover:border-accent-red/20 hover:bg-accent-red/10 hover:text-accent-red cursor-pointer disabled:opacity-40"
+                            className="flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center rounded-xl border border-transparent text-muted-foreground/70 transition-colors hover:border-accent-red/20 hover:bg-accent-red/10 hover:text-accent-red cursor-pointer disabled:opacity-40"
                           >
                             <Trash2 className="h-4 w-4" />
                           </button>
@@ -196,7 +196,7 @@ export function GroupsClient({
                             title={tCommon("confirm")}
                             aria-label={tCommon("confirm")}
                             data-testid={`confirm-delete-group-${group.id}`}
-                            className="flex h-11 items-center gap-1 rounded-xl border border-accent-red/30 bg-accent-red/15 px-3 text-xs font-medium text-accent-red hover:bg-accent-red/25 transition-colors cursor-pointer disabled:opacity-40"
+                            className="flex h-9 sm:h-11 items-center gap-1 rounded-xl border border-accent-red/30 bg-accent-red/15 px-3 text-xs font-medium text-accent-red hover:bg-accent-red/25 transition-colors cursor-pointer disabled:opacity-40"
                           >
                             <Check className="h-4 w-4" />
                             <span>{t("confirmDelete")}</span>
@@ -207,7 +207,7 @@ export function GroupsClient({
                             onClick={() => setConfirmDeleteId(null)}
                             title={tCommon("cancel")}
                             aria-label={tCommon("cancel")}
-                            className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                            className="flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center rounded-xl border border-border dark:border-white/10 bg-muted dark:bg-white/5 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
                           >
                             <X className="h-4 w-4" />
                           </button>
@@ -224,7 +224,7 @@ export function GroupsClient({
 
                   <Link
                     href={`/groups/${group.id}`}
-                    className="mt-4 flex items-center justify-between border-t border-white/5 pt-3.5 group"
+                    className="mt-4 flex items-center justify-between border-t border-border/60 dark:border-white/5 pt-3.5 group"
                   >
                     <div>
                       <p className="text-xs text-muted-foreground">

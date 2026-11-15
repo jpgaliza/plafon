@@ -64,22 +64,22 @@ function CustomTooltip({
       : "0";
 
   return (
-    <div className="rounded-xl border border-white/10 bg-[#121215]/95 backdrop-blur-md px-3.5 py-2.5 shadow-2xl shadow-black/80 ring-1 ring-white/5 select-none pointer-events-none">
+    <div className="rounded-xl border border-border dark:border-white/10 bg-popover/95 dark:bg-[#121215]/95 backdrop-blur-md px-3.5 py-2.5 shadow-2xl shadow-black/20 dark:shadow-black/80 ring-1 ring-border/50 dark:ring-white/5 select-none pointer-events-none">
       <div className="flex items-center gap-2 mb-1.5">
         <span
           className="size-2.5 rounded-full shrink-0 shadow-sm"
           style={{ backgroundColor: color }}
         />
-        <span className="text-xs font-medium text-zinc-300 max-w-[130px] truncate">
+        <span className="text-xs font-medium text-muted-foreground dark:text-zinc-300 max-w-[130px] truncate">
           {categoryName}
         </span>
         {total > 0 && (
-          <span className="ml-auto text-[10px] font-semibold text-zinc-400 bg-white/5 border border-white/10 px-1.5 py-0.5 rounded-full tabular-nums">
+          <span className="ml-auto text-[10px] font-semibold text-muted-foreground dark:text-zinc-400 bg-muted dark:bg-white/5 border border-border dark:border-white/10 px-1.5 py-0.5 rounded-full tabular-nums">
             {percentage}%
           </span>
         )}
       </div>
-      <div className="text-sm font-bold text-white tracking-tight tabular-nums pl-4.5">
+      <div className="text-sm font-bold text-popover-foreground dark:text-white tracking-tight tabular-nums pl-4.5">
         {formatCurrency(value, currency, locale)}
       </div>
     </div>
@@ -131,6 +131,8 @@ export function CategoryChart({
             paddingAngle={2}
             dataKey="value"
             stroke="none"
+            animationBegin={0}
+            animationDuration={400}
           >
             {chartData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.color} />

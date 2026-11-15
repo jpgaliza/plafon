@@ -50,7 +50,7 @@ export function ResetPasswordForm() {
         {/* Card */}
         <FadeIn
           delay={0.1}
-          className="rounded-2xl border border-white/10 bg-[#121215]/90 backdrop-blur-xl p-6 sm:p-8 shadow-2xl shadow-black/80 ring-1 ring-white/5"
+          className="rounded-2xl border border-border dark:border-white/10 bg-card/95 dark:bg-[#121215]/90 backdrop-blur-xl p-6 sm:p-8 shadow-xl dark:shadow-2xl dark:shadow-black/80 ring-1 ring-border/50 dark:ring-white/5"
         >
           {/* Brand header */}
           <div className="flex flex-col items-center text-center mb-6">
@@ -62,12 +62,12 @@ export function ResetPasswordForm() {
                 <span className="absolute right-1 top-1 h-4 w-[3px] bg-foreground" />
                 <span className="absolute left-1 bottom-[10px] h-[3px] w-4 bg-foreground" />
               </div>
-              <span className="font-bold text-xl tracking-tight text-white">
+              <span className="font-bold text-xl tracking-tight text-foreground dark:text-white">
                 Plafon
               </span>
             </Link>
 
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground dark:text-white">
               {t("resetPasswordTitle")}
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground mt-1">
@@ -87,7 +87,7 @@ export function ResetPasswordForm() {
           <form action={formAction} className="space-y-4">
             {/* New Password */}
             <div>
-              <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+              <label className="block text-xs font-medium text-foreground/80 dark:text-zinc-300 mb-1.5">
                 {t("newPasswordLabel")}
               </label>
               <div className="relative flex items-center">
@@ -98,7 +98,7 @@ export function ResetPasswordForm() {
                   required
                   minLength={6}
                   placeholder={t("newPasswordPlaceholder")}
-                  className="w-full rounded-xl border border-white/10 bg-background pl-10 pr-11 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/40 focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
+                  className="w-full rounded-xl border border-border dark:border-white/10 bg-background pl-10 pr-11 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/40 focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
                 />
                 <button
                   type="button"
@@ -117,7 +117,7 @@ export function ResetPasswordForm() {
 
             {/* Confirm New Password */}
             <div>
-              <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+              <label className="block text-xs font-medium text-foreground/80 dark:text-zinc-300 mb-1.5">
                 {t("confirmNewPasswordLabel")}
               </label>
               <div className="relative flex items-center">
@@ -128,7 +128,7 @@ export function ResetPasswordForm() {
                   required
                   minLength={6}
                   placeholder={t("confirmNewPasswordPlaceholder")}
-                  className="w-full rounded-xl border border-white/10 bg-background pl-10 pr-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/40 focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
+                  className="w-full rounded-xl border border-border dark:border-white/10 bg-background pl-10 pr-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/40 focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
                 />
               </div>
             </div>
@@ -149,16 +149,6 @@ export function ResetPasswordForm() {
               )}
             </button>
           </form>
-
-          {/* Footer link to login */}
-          <div className="mt-6 pt-5 border-t border-white/5 text-center text-xs text-muted-foreground">
-            <Link
-              href="/login"
-              className="font-medium text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-            >
-              ← {t("backToLogin")}
-            </Link>
-          </div>
         </FadeIn>
       </div>
     </div>

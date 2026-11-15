@@ -173,7 +173,7 @@ export function GroupDetailClient({
                     onClick={() => setRenameOpen(true)}
                     title={t("renameGroup")}
                     aria-label={t("renameGroup")}
-                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-transparent text-muted-foreground transition-colors hover:border-white/10 hover:bg-white/5 hover:text-foreground cursor-pointer"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-transparent text-muted-foreground transition-colors hover:border-border dark:hover:border-white/10 hover:bg-muted dark:hover:bg-white/5 hover:text-foreground cursor-pointer"
                   >
                     <Pencil className="h-4 w-4" />
                   </button>
@@ -204,7 +204,7 @@ export function GroupDetailClient({
             totals.hasIncome ? "grid-cols-1 sm:grid-cols-3" : "grid-cols-1"
           )}
         >
-          <div className="rounded-2xl border border-white/10 bg-card p-5 shadow-sm">
+          <div className="rounded-2xl border border-border dark:border-white/10 bg-card p-5 shadow-sm">
             <p className="text-xs font-medium text-muted-foreground">
               {t("totalSpent")}
             </p>
@@ -218,7 +218,7 @@ export function GroupDetailClient({
 
           {totals.hasIncome && (
             <>
-              <div className="rounded-2xl border border-white/10 bg-card p-5 shadow-sm">
+              <div className="rounded-2xl border border-border dark:border-white/10 bg-card p-5 shadow-sm">
                 <p className="text-xs font-medium text-muted-foreground">
                   {t("totalReceived")}
                 </p>
@@ -230,7 +230,7 @@ export function GroupDetailClient({
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-card p-5 shadow-sm">
+              <div className="rounded-2xl border border-border dark:border-white/10 bg-card p-5 shadow-sm">
                 <p className="text-xs font-medium text-muted-foreground">
                   {t("balance")}
                 </p>
@@ -264,7 +264,7 @@ export function GroupDetailClient({
                 data={chartData}
                 currency={currency}
                 locale={locale}
-                className="w-full h-full"
+                className="w-full h-[220px]"
                 innerRadius={70}
                 outerRadius={95}
               />
@@ -294,7 +294,7 @@ export function GroupDetailClient({
             </h2>
 
             {groupTransactions.length === 0 ? (
-              <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-card/50 px-6 py-12 text-center">
+              <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border dark:border-white/10 bg-card/50 px-6 py-12 text-center">
                 <Receipt className="h-10 w-10 text-muted-foreground/30 mb-3" />
                 <p className="text-sm font-medium text-foreground">
                   {t("noTransactionsInGroup")}
@@ -305,7 +305,7 @@ export function GroupDetailClient({
                 <button
                   type="button"
                   onClick={() => setAddExistingOpen(true)}
-                  className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-foreground hover:bg-white/10 transition-colors cursor-pointer"
+                  className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-xl border border-border dark:border-white/10 bg-muted dark:bg-white/5 px-4 py-2 text-xs font-semibold text-foreground hover:bg-muted/80 dark:hover:bg-white/10 transition-colors cursor-pointer"
                 >
                   <Plus className="h-3.5 w-3.5" />
                   <span>{t("addExisting")}</span>
@@ -358,7 +358,7 @@ function AddExistingTransactionsDrawer({
     <Drawer.Root open={open} onOpenChange={onOpenChange}>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs" />
-        <Drawer.Content className="fixed inset-x-0 bottom-0 z-50 mx-auto flex max-h-[88vh] w-full max-w-lg flex-col overflow-x-hidden rounded-t-2xl border-t border-white/10 bg-card outline-none">
+        <Drawer.Content className="fixed inset-x-0 bottom-0 md:left-64 md:bottom-4 z-50 mx-auto flex max-h-[88vh] w-full max-w-lg flex-col overflow-hidden no-scrollbar rounded-t-2xl md:rounded-2xl border-t md:border border-border dark:border-white/10 bg-card md:shadow-2xl outline-none">
           <Drawer.Handle className="mx-auto mb-2 mt-3 h-1.5 w-12 rounded-full bg-muted-foreground/30" />
           {open ? (
             <AddExistingTransactionsContent
@@ -435,7 +435,7 @@ function AddExistingTransactionsContent({
 
   return (
     <>
-      <div className="flex items-center justify-between border-b border-white/5 px-5 pb-3">
+      <div className="flex items-center justify-between border-b border-border/60 dark:border-white/5 px-5 pb-3">
         <div>
           <Drawer.Title className="text-lg font-semibold text-foreground">
             {t("selectTransactionsTitle")}
@@ -474,9 +474,9 @@ function AddExistingTransactionsContent({
         )}
       </div>
 
-      <div className="flex-1 w-full overflow-y-auto overflow-x-hidden px-5 py-4 space-y-2.5 no-scrollbar">
+      <div className="flex-1 min-h-0 w-full overflow-y-auto overflow-x-hidden px-5 py-4 space-y-2.5 no-scrollbar">
         {filtered.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-white/10 bg-card/40 py-10 px-4 text-center">
+          <div className="rounded-2xl border border-dashed border-border dark:border-white/10 bg-card/40 py-10 px-4 text-center">
             <Receipt className="h-8 w-8 text-muted-foreground/30 mx-auto mb-2" />
             <p className="text-xs text-muted-foreground">
               {t("noAvailableTransactions")}
@@ -510,7 +510,7 @@ function AddExistingTransactionsContent({
                       "flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-colors",
                       isSelected
                         ? "border-accent-blue bg-accent-blue text-white"
-                        : "border-white/20 bg-transparent"
+                        : "border-border dark:border-white/20 bg-transparent"
                     )}
                   >
                     {isSelected && <Check className="h-3.5 w-3.5" />}
@@ -550,7 +550,7 @@ function AddExistingTransactionsContent({
         )}
       </div>
 
-      <div className="border-t border-white/5 px-5 py-4">
+      <div className="border-t border-border/60 dark:border-white/5 px-5 py-4">
         <button
           type="button"
           disabled={selectedIds.length === 0 || isPending}
