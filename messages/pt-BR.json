@@ -14,12 +14,18 @@
     "dashboard": "Início",
     "transactions": "Extrato",
     "add": "Adicionar",
+    "groups": "Grupos",
     "subscriptions": "Assinaturas",
     "settings": "Ajustes"
   },
   "Settings": {
     "title": "Ajustes",
     "profile": "Perfil",
+    "monthlyBudget": "Teto de gastos mensal",
+    "monthlyBudgetDescription": "Limite mensal planejado para acompanhar quanto ainda resta no seu orçamento",
+    "monthlyBudgetPlaceholder": "0,00",
+    "saveBudget": "Salvar teto",
+    "budgetSaved": "Teto atualizado!",
     "language": "Idioma",
     "languageDescription": "Escolha o idioma do aplicativo",
     "currency": "Moeda base",
@@ -51,16 +57,29 @@
     "monthSummary": "Resumo Mensal",
     "categories": "Categorias",
     "recentTransactions": "Transações Recentes",
-    "viewAll": "Ver tudo"
+    "viewAll": "Ver tudo",
+    "spendingCeiling": "Teto mensal",
+    "remaining": "restante",
+    "exceeded": "excedido",
+    "ofBudget": "de {budget}",
+    "setBudget": "Definir teto de gastos",
+    "noTransactions": "Nenhuma transação registrada ainda",
+    "noTransactionsDesc": "Toque no botão + para registrar sua primeira receita ou despesa.",
+    "noCategoryData": "Nenhum dado para exibir."
   },
   "Transactions": {
     "title": "Transações",
+    "subtitle": "Extrato e histórico completo das suas transações",
     "noTransactions": "Nenhuma transação encontrada",
+    "noTransactionsDesc": "Adicione suas receitas e despesas para acompanhar seu extrato.",
     "filter": "Filtrar",
     "all": "Todas",
     "income": "Receitas",
     "expense": "Despesas",
-    "search": "Buscar transações..."
+    "search": "Buscar transações...",
+    "editTransaction": "Editar transação",
+    "deleteTransaction": "Excluir transação",
+    "confirmDelete": "Excluir?"
   },
   "Subscriptions": {
     "title": "Assinaturas",
@@ -106,6 +125,7 @@
   },
   "NewTransaction": {
     "title": "Nova Transação",
+    "editTitle": "Editar Transação",
     "amount": "Valor",
     "description": "Descrição",
     "category": "Categoria",
@@ -114,7 +134,13 @@
     "income": "Receita",
     "expense": "Despesa",
     "paymentMethod": "Método de pagamento",
-    "addTransaction": "Adicionar transação"
+    "addTransaction": "Adicionar transação",
+    "saveChanges": "Salvar alterações",
+    "groups": "Grupos",
+    "groupsOptional": "opcional",
+    "createGroupInline": "Criar grupo",
+    "groupNamePlaceholder": "Nome do grupo...",
+    "addGroupConfirm": "Criar"
   },
   "CategoriesPage": {
     "title": "Análise de Categorias",
@@ -122,7 +148,40 @@
     "total": "Total",
     "breakdown": "Detalhamento",
     "selectMonth": "Selecione o mês",
-    "noData": "Nenhum dado para exibir."
+    "noData": "Nenhum dado para exibir.",
+    "noDataDesc": "Nenhuma despesa registrada neste mês."
+  },
+  "Groups": {
+    "title": "Grupos",
+    "subtitle": "Reúna transações por viagem, meta ou projeto",
+    "newGroup": "Criar grupo",
+    "renameGroup": "Renomear grupo",
+    "deleteGroup": "Excluir grupo",
+    "confirmDelete": "Excluir?",
+    "deleteGroupNote": "As transações não serão excluídas",
+    "groupName": "Nome do grupo",
+    "groupNamePlaceholder": "Ex: Viagem França, PlayStation 5...",
+    "createSubmit": "Criar grupo",
+    "saveSubmit": "Salvar nome",
+    "noGroups": "Nenhum grupo criado",
+    "noGroupsDesc": "Crie agrupamentos para acompanhar gastos de viagens, metas ou projetos específicos.",
+    "createFirstGroup": "Criar primeiro grupo",
+    "transactionCount": "{count, plural, =0 {0 transações} one {1 transação} other {# transações}}",
+    "totalSpent": "Total gasto",
+    "totalReceived": "Total recebido",
+    "balance": "Saldo",
+    "categoriesBreakdown": "Gastos por categoria",
+    "groupTransactions": "Transações do grupo",
+    "addExisting": "Adicionar transações",
+    "removeFromGroup": "Remover do grupo",
+    "noTransactionsInGroup": "Nenhuma transação neste grupo",
+    "noTransactionsInGroupDesc": "Adicione transações existentes ou vincule novas transações ao criá-las.",
+    "selectTransactionsTitle": "Adicionar transações existentes",
+    "selectTransactionsSubtitle": "Selecione uma ou mais transações para incluir neste grupo",
+    "searchTransactions": "Buscar transações...",
+    "noAvailableTransactions": "Nenhuma transação disponível para adicionar",
+    "addSelected": "Adicionar selecionadas ({count})",
+    "backToGroups": "Voltar para grupos"
   },
   "Landing": {
     "login": "Entrar",
@@ -138,7 +197,8 @@
     "feature2Title": "Plano de Voo Mensal",
     "feature2Desc": "Dashboard inteligente que foca no que realmente importa: quanto dinheiro ainda sobra no seu teto financeiro.",
     "feature3Title": "Radar de Assinaturas",
-    "feature3Desc": "Netflix, Spotify, Academia... Chega de surpresas no cartão. Saiba exatamente quando e quanto cada serviço vai te cobrar e decida se vale a pena manter antes da fatura fechar."
+    "feature3Desc": "Netflix, Spotify, Academia... Chega de surpresas no cartão. Saiba exatamente quando e quanto cada serviço vai te cobrar e decida se vale a pena manter antes da fatura fechar.",
+    "budgetPreviewLabel": "Seu teto mensal"
   },
   "Auth": {
     "loginTitle": "Bem-vindo de volta",

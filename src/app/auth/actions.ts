@@ -2,6 +2,7 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { syncCookiesFromProfile } from "@/lib/preferences";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 
 export interface AuthActionResult {
@@ -30,13 +31,17 @@ export async function signInAction(
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
   if (error) {
     return { success: false, error: error.message };
+  }
+
+  if (data.user) {
+    await syncCookiesFromProfile(supabase, data.user.id);
   }
 
   redirect("/dashboard");
@@ -99,6 +104,9 @@ export async function signUpAction(
 
   // If email confirmation is disabled or session is created immediately:
   if (data?.session) {
+    if (data.user) {
+      await syncCookiesFromProfile(supabase, data.user.id);
+    }
     redirect("/dashboard");
   }
 

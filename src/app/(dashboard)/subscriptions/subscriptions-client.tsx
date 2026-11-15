@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useTranslations, useLocale } from "next-intl";
+import { useOptimistic, useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import {
   CreditCard,
   Plus,
@@ -9,150 +9,135 @@ import {
   CheckCircle2,
   Trash2,
   Power,
-  Tv,
-  Music,
-  Dumbbell,
-  Cloud,
-  ShoppingBag,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatCurrency } from "@/lib/currency";
-import { DEFAULT_CATEGORIES } from "@/lib/categories";
-import { FadeIn } from "@/components/ui/fade-in";
+import { resolveCategoryName } from "@/lib/finance";
+import { CategoryIcon } from "@/lib/icons";
 import {
-  SubscriptionDrawer,
-  type SubscriptionItem,
-} from "@/components/subscription-drawer";
+  deleteSubscriptionAction,
+  toggleSubscriptionAction,
+  type SubscriptionWithCategory,
+} from "@/app/(dashboard)/actions";
+import { FadeIn } from "@/components/ui/fade-in";
+import { SubscriptionDrawer } from "@/components/subscription-drawer";
 
-// Initial realistic subscriptions matching Plafon landing page showcase
-const INITIAL_SUBSCRIPTIONS: SubscriptionItem[] = [
-  {
-    id: "sub-1",
-    name: "Netflix",
-    amount: 55.9,
-    due_day: 10,
-    payment_method: "credit",
-    category_name: "Lazer",
-    category_icon: "Tv",
-    category_color: "#E50914",
-    is_active: true,
-  },
-  {
-    id: "sub-2",
-    name: "Spotify Family",
-    amount: 34.9,
-    due_day: 15,
-    payment_method: "credit",
-    category_name: "Lazer",
-    category_icon: "Music",
-    category_color: "#1DB954",
-    is_active: true,
-  },
-  {
-    id: "sub-3",
-    name: "Academia Smart Fit",
-    amount: 99.9,
-    due_day: 1,
-    payment_method: "debit",
-    category_name: "Saúde",
-    category_icon: "Dumbbell",
-    category_color: "#EAB308",
-    is_active: true,
-  },
-  {
-    id: "sub-4",
-    name: "iCloud 200GB",
-    amount: 14.9,
-    due_day: 20,
-    payment_method: "credit",
-    category_name: "Serviços",
-    category_icon: "Cloud",
-    category_color: "#3B82F6",
-    is_active: true,
-  },
-];
-
-const SERVICE_ICONS: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
-  Netflix: Tv,
-  Spotify: Music,
-  "Spotify Family": Music,
-  "Academia Smart Fit": Dumbbell,
-  "Smart Fit Gym": Dumbbell,
-  "iCloud 200GB": Cloud,
-  "Amazon Prime": ShoppingBag,
+const SERVICE_ICON_NAME: Record<string, string> = {
+  Netflix: "Tv",
+  Spotify: "Music",
+  "Spotify Family": "Music",
+  "Academia Smart Fit": "Dumbbell",
+  "Smart Fit Gym": "Dumbbell",
+  Academia: "Dumbbell",
+  Gym: "Dumbbell",
+  "iCloud 200GB": "Cloud",
+  "iCloud / Google": "Cloud",
+  "Amazon Prime": "ShoppingBag",
 };
 
-export function SubscriptionsClient() {
+type OptimisticAction =
+  | { type: "toggle"; id: string; isActive: boolean }
+  | { type: "delete"; id: string }
+  | { type: "add"; sub: SubscriptionWithCategory };
+
+function subscriptionsReducer(
+  state: SubscriptionWithCategory[],
+  action: OptimisticAction
+): SubscriptionWithCategory[] {
+  switch (action.type) {
+    case "toggle":
+      return state.map((s) =>
+        s.id === action.id ? { ...s, is_active: action.isActive } : s
+      );
+    case "delete":
+      return state.filter((s) => s.id !== action.id);
+    case "add":
+      return [action.sub, ...state];
+  }
+}
+
+interface SubscriptionsClientProps {
+  initialSubscriptions: SubscriptionWithCategory[];
+  locale: string;
+  currency: string;
+  currentDay: number;
+  daysInCurrentMonth: number;
+}
+
+export function SubscriptionsClient({
+  initialSubscriptions,
+  locale,
+  currency,
+  currentDay,
+  daysInCurrentMonth,
+}: SubscriptionsClientProps) {
   const t = useTranslations("Subscriptions");
-  const locale = useLocale();
   const isEn = locale.startsWith("en");
 
-  const [subscriptions, setSubscriptions] = useState<SubscriptionItem[]>(INITIAL_SUBSCRIPTIONS);
+  const [subscriptions, applyOptimistic] = useOptimistic(
+    initialSubscriptions,
+    subscriptionsReducer
+  );
   const [filter, setFilter] = useState<"all" | "active" | "inactive">("all");
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
-  // Derived metrics
   const activeSubs = subscriptions.filter((s) => s.is_active);
   const inactiveSubs = subscriptions.filter((s) => !s.is_active);
 
   const totalMonthly = activeSubs.reduce((acc, curr) => acc + curr.amount, 0);
 
-  // Filtered list
   const filteredList = subscriptions.filter((s) => {
     if (filter === "active") return s.is_active;
     if (filter === "inactive") return !s.is_active;
     return true;
   });
 
-  // Calculate days remaining until due date
-  const today = new Date();
-  const currentDay = today.getDate();
-
   function getDueStatus(dueDay: number) {
     let daysRemaining = dueDay - currentDay;
     if (daysRemaining < 0) {
-      // Due next month
-      const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-      daysRemaining = daysInMonth - currentDay + dueDay;
+      daysRemaining = daysInCurrentMonth - currentDay + dueDay;
     }
 
     if (daysRemaining === 0) {
-      return { label: t("dueToday"), urgency: "high" };
+      return { label: t("dueToday"), urgency: "high" as const, daysRemaining };
     }
     if (daysRemaining <= 5) {
       return {
         label: t("dueInDays", { days: daysRemaining }),
-        urgency: "warning",
+        urgency: "warning" as const,
+        daysRemaining,
       };
     }
     return {
       label: t("everyDay", { day: dueDay }),
-      urgency: "normal",
+      urgency: "normal" as const,
+      daysRemaining,
     };
   }
 
-  function getCategoryLabel(categoryName: string) {
-    if (!isEn) return categoryName;
-    const match = DEFAULT_CATEGORIES.find(
-      (c) =>
-        c.name.toLowerCase() === categoryName.toLowerCase() ||
-        c.nameEn.toLowerCase() === categoryName.toLowerCase()
-    );
-    return match ? match.nameEn : categoryName;
-  }
+  const nextDueSub =
+    activeSubs.length > 0
+      ? [...activeSubs].sort(
+          (a, b) =>
+            getDueStatus(a.due_day).daysRemaining -
+            getDueStatus(b.due_day).daysRemaining
+        )[0]
+      : null;
 
-  function handleToggle(id: string) {
-    setSubscriptions((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, is_active: !s.is_active } : s))
-    );
+  function handleToggle(sub: SubscriptionWithCategory) {
+    const nextActive = !sub.is_active;
+    startTransition(async () => {
+      applyOptimistic({ type: "toggle", id: sub.id, isActive: nextActive });
+      await toggleSubscriptionAction(sub.id, nextActive);
+    });
   }
 
   function handleDelete(id: string) {
-    setSubscriptions((prev) => prev.filter((s) => s.id !== id));
-  }
-
-  function handleCreated(newSub: SubscriptionItem) {
-    setSubscriptions((prev) => [newSub, ...prev]);
+    startTransition(async () => {
+      applyOptimistic({ type: "delete", id });
+      await deleteSubscriptionAction(id);
+    });
   }
 
   return (
@@ -160,12 +145,15 @@ export function SubscriptionsClient() {
       <SubscriptionDrawer
         open={drawerOpen}
         onOpenChange={setDrawerOpen}
-        onCreated={handleCreated}
+        currency={currency}
       />
 
-      <div className="mx-auto w-full max-w-4xl px-4 py-6 md:py-8 space-y-6">
+      <div className="mx-auto w-full max-w-lg md:max-w-6xl px-4 md:px-8 py-6 md:py-8 space-y-6">
         {/* Top Header */}
-        <FadeIn delay={0.1} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <FadeIn
+          delay={0.1}
+          className="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+        >
           <div>
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
               {t("title")}
@@ -176,6 +164,7 @@ export function SubscriptionsClient() {
           </div>
 
           <button
+            type="button"
             onClick={() => setDrawerOpen(true)}
             className="inline-flex items-center justify-center gap-2 rounded-xl bg-accent-blue px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-accent-blue/25 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer shrink-0"
           >
@@ -197,12 +186,17 @@ export function SubscriptionsClient() {
             <p className="text-xs font-medium text-muted-foreground">
               {t("monthlyTotal")}
             </p>
-            <p className="text-2xl md:text-3xl font-bold text-foreground tabular-nums tracking-tight mt-1">
-              {formatCurrency(totalMonthly, isEn ? "USD" : "BRL", locale)}
+            <p
+              data-testid="subscriptions-monthly-total"
+              className="text-2xl md:text-3xl font-bold text-foreground tabular-nums tracking-tight mt-1"
+            >
+              {formatCurrency(totalMonthly, currency, locale)}
             </p>
             <div className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
               <span className="inline-block size-2 rounded-full bg-accent-green" />
-              <span>{t("activeSubsCount", { count: activeSubs.length })}</span>
+              <span>
+                {t("activeSubsCount", { count: activeSubs.length })}
+              </span>
             </div>
           </FadeIn>
 
@@ -212,7 +206,9 @@ export function SubscriptionsClient() {
             className="rounded-2xl border border-white/10 bg-card p-5 shadow-sm"
           >
             <div className="flex items-center justify-between">
-              <p className="text-xs font-medium text-muted-foreground">{t("status")}</p>
+              <p className="text-xs font-medium text-muted-foreground">
+                {t("status")}
+              </p>
               <CheckCircle2 className="h-4 w-4 text-accent-green" />
             </div>
             <p className="text-2xl md:text-3xl font-bold text-foreground tabular-nums tracking-tight mt-1">
@@ -232,21 +228,26 @@ export function SubscriptionsClient() {
             className="rounded-2xl border border-white/10 bg-card p-5 shadow-sm flex flex-col justify-between"
           >
             <div className="flex items-center justify-between">
-              <p className="text-xs font-medium text-muted-foreground">{t("nextDue")}</p>
+              <p className="text-xs font-medium text-muted-foreground">
+                {t("nextDue")}
+              </p>
               <Calendar className="h-4 w-4 text-accent-blue" />
             </div>
             <div>
-              {activeSubs.length > 0 ? (
+              {nextDueSub ? (
                 <>
                   <p className="text-lg font-bold text-foreground truncate mt-1">
-                    {activeSubs[0].name}
+                    {nextDueSub.name}
                   </p>
                   <p className="text-xs font-medium text-accent-blue">
-                    {t("everyDay", { day: activeSubs[0].due_day })} • {formatCurrency(activeSubs[0].amount, isEn ? "USD" : "BRL", locale)}
+                    {t("everyDay", { day: nextDueSub.due_day })} •{" "}
+                    {formatCurrency(nextDueSub.amount, currency, locale)}
                   </p>
                 </>
               ) : (
-                <p className="text-sm text-muted-foreground mt-1">{t("noneActive")}</p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {t("noneActive")}
+                </p>
               )}
             </div>
           </FadeIn>
@@ -258,13 +259,26 @@ export function SubscriptionsClient() {
             <div className="flex items-center justify-center gap-1 rounded-xl bg-muted/60 p-1 mx-auto sm:mx-0">
               {(
                 [
-                  { key: "all", label: t("all"), count: subscriptions.length },
-                  { key: "active", label: t("active"), count: activeSubs.length },
-                  { key: "inactive", label: t("inactive"), count: inactiveSubs.length },
+                  {
+                    key: "all",
+                    label: t("all"),
+                    count: subscriptions.length,
+                  },
+                  {
+                    key: "active",
+                    label: t("active"),
+                    count: activeSubs.length,
+                  },
+                  {
+                    key: "inactive",
+                    label: t("inactive"),
+                    count: inactiveSubs.length,
+                  },
                 ] as const
               ).map((tab) => (
                 <button
                   key={tab.key}
+                  type="button"
                   onClick={() => setFilter(tab.key)}
                   className={cn(
                     "flex items-center justify-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all cursor-pointer",
@@ -297,6 +311,7 @@ export function SubscriptionsClient() {
                 {t("noSubscriptionsDesc")}
               </p>
               <button
+                type="button"
                 onClick={() => setDrawerOpen(true)}
                 className="inline-flex items-center gap-2 rounded-xl bg-accent-blue px-4 py-2.5 text-xs font-semibold text-white shadow-md shadow-accent-blue/20 hover:scale-105 active:scale-95 transition-all cursor-pointer"
               >
@@ -308,12 +323,20 @@ export function SubscriptionsClient() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {filteredList.map((sub) => {
                 const dueStatus = getDueStatus(sub.due_day);
-                const IconComponent = SERVICE_ICONS[sub.name] || CreditCard;
-                const displayName = isEn && sub.name === "Academia Smart Fit" ? "Smart Fit Gym" : sub.name;
+                const iconName =
+                  SERVICE_ICON_NAME[sub.name] ||
+                  sub.category_icon ||
+                  "CreditCard";
+                const catLabel = resolveCategoryName(
+                  sub.category_name,
+                  isEn,
+                  sub.category_name_en
+                );
 
                 return (
                   <div
                     key={sub.id}
+                    data-testid={`subscription-card-${sub.id}`}
                     className={cn(
                       "group relative flex items-center justify-between p-4 rounded-xl border transition-all duration-200",
                       sub.is_active
@@ -330,7 +353,8 @@ export function SubscriptionsClient() {
                           border: `1px solid ${sub.category_color}30`,
                         }}
                       >
-                        <IconComponent
+                        <CategoryIcon
+                          name={iconName}
                           className="h-5 w-5"
                           style={{ color: sub.category_color }}
                         />
@@ -340,7 +364,7 @@ export function SubscriptionsClient() {
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
                           <p className="font-semibold text-sm md:text-base text-foreground truncate">
-                            {displayName}
+                            {sub.name}
                           </p>
                           {!sub.is_active && (
                             <span className="rounded-md bg-white/10 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
@@ -350,13 +374,15 @@ export function SubscriptionsClient() {
                         </div>
 
                         <div className="flex items-center gap-2 mt-0.5 text-xs text-muted-foreground">
-                          <span>{getCategoryLabel(sub.category_name)}</span>
+                          <span>{catLabel}</span>
                           <span>•</span>
                           <span
                             className={cn(
                               "font-medium",
-                              dueStatus.urgency === "high" && "text-accent-red font-bold",
-                              dueStatus.urgency === "warning" && "text-amber-400 font-semibold"
+                              dueStatus.urgency === "high" &&
+                                "text-accent-red font-bold",
+                              dueStatus.urgency === "warning" &&
+                                "text-amber-400 font-semibold"
                             )}
                           >
                             {dueStatus.label}
@@ -369,7 +395,7 @@ export function SubscriptionsClient() {
                     <div className="flex items-center gap-3 shrink-0 ml-3">
                       <div className="text-right">
                         <p className="text-base font-bold text-foreground tabular-nums tracking-tight">
-                          {formatCurrency(sub.amount, isEn ? "USD" : "BRL", locale)}
+                          {formatCurrency(sub.amount, currency, locale)}
                         </p>
                         <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
                           {t("perMonth")}
@@ -379,8 +405,18 @@ export function SubscriptionsClient() {
                       {/* Quick Toggle Active Button */}
                       <button
                         type="button"
-                        onClick={() => handleToggle(sub.id)}
-                        title={sub.is_active ? t("pauseSubscription") : t("reactivateSubscription")}
+                        disabled={isPending}
+                        onClick={() => handleToggle(sub)}
+                        title={
+                          sub.is_active
+                            ? t("pauseSubscription")
+                            : t("reactivateSubscription")
+                        }
+                        aria-label={
+                          sub.is_active
+                            ? t("pauseSubscription")
+                            : t("reactivateSubscription")
+                        }
                         className={cn(
                           "flex h-8 w-8 items-center justify-center rounded-lg border transition-all cursor-pointer",
                           sub.is_active
@@ -394,8 +430,10 @@ export function SubscriptionsClient() {
                       {/* Delete Button */}
                       <button
                         type="button"
+                        disabled={isPending}
                         onClick={() => handleDelete(sub.id)}
                         title={t("deleteSubscription")}
+                        aria-label={t("deleteSubscription")}
                         className="flex h-8 w-8 items-center justify-center rounded-lg border border-transparent text-muted-foreground/60 transition-all hover:border-accent-red/20 hover:bg-accent-red/10 hover:text-accent-red cursor-pointer"
                       >
                         <Trash2 className="h-3.5 w-3.5" />

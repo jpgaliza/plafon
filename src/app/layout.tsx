@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
@@ -25,13 +26,19 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const locale = await getLocale();
-  const messages = await getMessages();
+  const [cookieStore, locale, messages] = await Promise.all([
+    cookies(),
+    getLocale(),
+    getMessages(),
+  ]);
+
+  const theme = cookieStore.get("NEXT_THEME")?.value || "dark";
+  const themeClass = theme === "light" ? "" : "dark";
 
   return (
     <html
       lang={locale}
-      className={`${geistSans.variable} ${geistMono.variable} dark h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable}${themeClass ? ` ${themeClass}` : ""} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">

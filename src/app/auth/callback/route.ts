@@ -1,4 +1,8 @@
 import { NextResponse } from "next/server";
+import {
+  getUserPreferenceCookiesFromProfile,
+  PREFERENCE_COOKIE_OPTIONS,
+} from "@/lib/preferences";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
@@ -15,9 +19,33 @@ export async function GET(request: Request) {
 
   if (code && isSupabaseConfigured()) {
     const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`);
+      const response = NextResponse.redirect(`${origin}${next}`);
+      if (data.user) {
+        const prefs = await getUserPreferenceCookiesFromProfile(
+          supabase,
+          data.user.id
+        );
+        if (prefs) {
+          response.cookies.set(
+            "NEXT_LOCALE",
+            prefs.locale,
+            PREFERENCE_COOKIE_OPTIONS
+          );
+          response.cookies.set(
+            "NEXT_CURRENCY",
+            prefs.currency,
+            PREFERENCE_COOKIE_OPTIONS
+          );
+          response.cookies.set(
+            "NEXT_THEME",
+            prefs.theme,
+            PREFERENCE_COOKIE_OPTIONS
+          );
+        }
+      }
+      return response;
     }
     return NextResponse.redirect(`${origin}/login?error=expired`);
   }

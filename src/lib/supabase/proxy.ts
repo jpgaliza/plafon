@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import type { Database } from "@/lib/database.types";
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -14,7 +15,7 @@ export async function updateSession(request: NextRequest) {
     return supabaseResponse;
   }
 
-  const supabase = createServerClient(
+  const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -83,16 +84,21 @@ export async function updateSession(request: NextRequest) {
       request.nextUrl.pathname.startsWith(`${path}/`)
   );
 
-  // If user is already authenticated and visits login/register/forgot-password, send to dashboard
+  // If user is already authenticated and visits login/register/forgot-password, verify active session before sending to dashboard
   if (
     user &&
     (request.nextUrl.pathname === "/login" ||
       request.nextUrl.pathname === "/register" ||
       request.nextUrl.pathname === "/forgot-password")
   ) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
-    return NextResponse.redirect(url);
+    const {
+      data: { user: verifiedUser },
+    } = await supabase.auth.getUser();
+    if (verifiedUser) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/dashboard";
+      return NextResponse.redirect(url);
+    }
   }
 
   // /reset-password requires an active recovery session (created by /auth/callback)
