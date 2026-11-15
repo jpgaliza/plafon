@@ -35,7 +35,7 @@ export function TransactionDrawer({
     <Drawer.Root open={open} onOpenChange={onOpenChange}>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-50 bg-black/60" />
-        <Drawer.Content className="fixed inset-x-0 bottom-0 z-50 mx-auto flex max-h-[92vh] w-full max-w-lg flex-col rounded-t-2xl bg-card outline-none">
+        <Drawer.Content className="fixed inset-x-0 bottom-0 z-50 mx-auto flex max-h-[92vh] w-full max-w-lg flex-col overflow-x-hidden rounded-t-2xl bg-card outline-none">
           <Drawer.Handle className="mx-auto mb-2 mt-3 h-1.5 w-12 rounded-full bg-muted-foreground/30" />
           {open ? (
             <TransactionDrawerForm
@@ -215,7 +215,7 @@ function TransactionDrawerForm({
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto px-4 pb-8 no-scrollbar">
+      <div className="flex-1 w-full overflow-y-auto overflow-x-hidden px-4 pb-8 no-scrollbar">
         {/* Type toggle */}
         <div className="flex gap-1 rounded-xl bg-muted p-1">
           <button
@@ -285,7 +285,7 @@ function TransactionDrawerForm({
                 const val = e.target.value.replace(/[^0-9.,]/g, "");
                 setAmount(val);
               }}
-              className="flex-1 bg-transparent text-2xl font-bold tabular-nums text-foreground outline-none placeholder:text-muted-foreground/40"
+              className="min-w-0 w-full flex-1 bg-transparent text-2xl font-bold tabular-nums text-foreground outline-none placeholder:text-muted-foreground/40"
               autoFocus
             />
           </div>
@@ -330,7 +330,7 @@ function TransactionDrawerForm({
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="flex-1 bg-transparent text-sm text-foreground outline-none cursor-pointer"
+              className="min-w-0 w-full flex-1 bg-transparent text-sm text-foreground outline-none cursor-pointer"
               onClick={(e) => {
                 e.stopPropagation();
                 if ("showPicker" in HTMLInputElement.prototype) {
@@ -436,7 +436,7 @@ function TransactionDrawerForm({
                   }
                 }}
                 data-testid="tx-drawer-new-group-input"
-                className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-xs text-foreground outline-none placeholder:text-muted-foreground/50 focus:border-accent-blue"
+                className="min-w-0 w-full flex-1 rounded-lg border border-border bg-background px-3 py-2 text-xs text-foreground outline-none placeholder:text-muted-foreground/50 focus:border-accent-blue"
               />
               <button
                 type="button"

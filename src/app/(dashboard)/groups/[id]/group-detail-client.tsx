@@ -144,7 +144,7 @@ export function GroupDetailClient({
         transaction={editingTx}
       />
 
-      <div className="mx-auto w-full max-w-4xl px-4 py-6 md:py-8 space-y-6">
+      <div className="mx-auto w-full max-w-lg md:max-w-6xl px-4 md:px-8 py-6 md:py-8 space-y-6">
         {/* Back link & header */}
         <FadeIn delay={0.1} className="space-y-4">
           <Link
@@ -358,7 +358,7 @@ function AddExistingTransactionsDrawer({
     <Drawer.Root open={open} onOpenChange={onOpenChange}>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs" />
-        <Drawer.Content className="fixed inset-x-0 bottom-0 z-50 mx-auto flex max-h-[88vh] w-full max-w-lg flex-col rounded-t-2xl border-t border-white/10 bg-card outline-none">
+        <Drawer.Content className="fixed inset-x-0 bottom-0 z-50 mx-auto flex max-h-[88vh] w-full max-w-lg flex-col overflow-x-hidden rounded-t-2xl border-t border-white/10 bg-card outline-none">
           <Drawer.Handle className="mx-auto mb-2 mt-3 h-1.5 w-12 rounded-full bg-muted-foreground/30" />
           {open ? (
             <AddExistingTransactionsContent
@@ -463,7 +463,7 @@ function AddExistingTransactionsContent({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             data-testid="add-existing-search"
-            className="w-full rounded-xl border border-border bg-background pl-10 pr-4 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/50 focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
+            className="min-w-0 w-full rounded-xl border border-border bg-background pl-10 pr-4 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/50 focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
           />
         </div>
 
@@ -474,7 +474,7 @@ function AddExistingTransactionsContent({
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-2.5 no-scrollbar">
+      <div className="flex-1 w-full overflow-y-auto overflow-x-hidden px-5 py-4 space-y-2.5 no-scrollbar">
         {filtered.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-white/10 bg-card/40 py-10 px-4 text-center">
             <Receipt className="h-8 w-8 text-muted-foreground/30 mx-auto mb-2" />

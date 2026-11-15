@@ -95,7 +95,7 @@ export function CategoriesClient({
   }, [transactions, selectedMonth, isEn]);
 
   return (
-    <div className="mx-auto w-full max-w-lg md:max-w-4xl px-4 md:px-8 py-6 md:py-8">
+    <div className="mx-auto w-full max-w-lg md:max-w-6xl px-4 md:px-8 py-6 md:py-8">
       <FadeIn delay={0.1} className="flex items-center gap-4 mb-8">
         <Link
           href="/dashboard"

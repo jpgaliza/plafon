@@ -175,7 +175,7 @@ export function DashboardClient({
         </div>
       </div>
 
-      <div className="md:grid md:grid-cols-3 md:gap-8 mt-6 md:mt-8">
+      <div className="flex flex-col md:grid md:grid-cols-3 md:gap-8 mt-6 md:mt-8">
         {/* Left Column (Transactions on Desktop) */}
         <div className="md:col-span-2 order-2 md:order-1">
           {/* Recent Transactions */}
@@ -292,7 +292,7 @@ export function DashboardClient({
                 data={chartData}
                 currency={currency}
                 locale={locale}
-                className="w-full h-full"
+                className="w-full h-[220px]"
                 innerRadius={70}
                 outerRadius={95}
               />

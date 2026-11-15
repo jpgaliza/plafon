@@ -31,13 +31,11 @@ export default async function SettingsPage() {
   const initialMonthlyBudget = profile?.monthly_budget ?? 0;
 
   return (
-    <div className="mx-auto w-full max-w-lg">
-      <SettingsClient
-        currentLocale={currentLocale}
-        currentCurrency={currentCurrency}
-        currentTheme={currentTheme}
-        initialMonthlyBudget={initialMonthlyBudget}
-      />
-    </div>
+    <SettingsClient
+      currentLocale={currentLocale}
+      currentCurrency={currentCurrency}
+      currentTheme={currentTheme}
+      initialMonthlyBudget={initialMonthlyBudget}
+    />
   );
 }

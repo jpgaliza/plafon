@@ -75,11 +75,14 @@ export function SettingsClient({
   }
 
   return (
-    <div className="flex flex-col gap-6 px-4 py-6">
+    <div className="mx-auto w-full max-w-lg md:max-w-6xl px-4 md:px-8 py-6 md:py-8 space-y-6">
       {/* Header */}
-      <h1 className="text-2xl font-bold tracking-tight">{t("title")}</h1>
+      <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+        {t("title")}
+      </h1>
 
-      {/* Monthly Spending Ceiling */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Monthly Spending Ceiling */}
       <section className="rounded-xl border border-border bg-card p-1">
         <div className="flex items-center gap-3 px-3 py-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent-blue/10">
@@ -229,6 +232,7 @@ export function SettingsClient({
           ))}
         </div>
       </section>
+      </div>
 
       {/* Logout */}
       <section className="rounded-xl border border-border bg-card">

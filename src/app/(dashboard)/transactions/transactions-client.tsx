@@ -83,7 +83,7 @@ export function TransactionsClient({
         transaction={editingTx}
       />
 
-      <div className="mx-auto w-full max-w-4xl px-4 py-6 md:py-8 space-y-6">
+      <div className="mx-auto w-full max-w-lg md:max-w-6xl px-4 md:px-8 py-6 md:py-8 space-y-6">
         {/* Header */}
         <FadeIn
           delay={0.1}
