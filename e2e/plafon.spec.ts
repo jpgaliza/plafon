@@ -30,7 +30,7 @@ async function resetE2EUserState() {
       theme: "dark",
     })
     .eq("id", userId);
-  await supabase.auth.signOut();
+  await supabase.auth.signOut({ scope: "local" });
 }
 
 async function loginAsTestUser(page: Page) {
